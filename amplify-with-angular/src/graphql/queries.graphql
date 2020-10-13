@@ -1,0 +1,189 @@
+# this is an auto generated file. This will be overwritten
+query GetBuilding($buildingId: ID!) {
+  getBuilding(buildingId: $buildingId) {
+    buildingId
+    name
+    country
+    city
+    streetAddress
+    postalCode
+    room {
+      items {
+        roomId
+        buildingId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    cityPostalCodeStreet
+    createdAt
+    updatedAt
+  }
+}
+query ListBuildings(
+  $buildingId: ID
+  $filter: ModelBuildingFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listBuildings(
+    buildingId: $buildingId
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      buildingId
+      name
+      country
+      city
+      streetAddress
+      postalCode
+      room {
+        nextToken
+      }
+      cityPostalCodeStreet
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query GetRoom($buildingId: ID!, $roomId: ID!) {
+  getRoom(buildingId: $buildingId, roomId: $roomId) {
+    roomId
+    buildingId
+    name
+    building {
+      buildingId
+      name
+      country
+      city
+      streetAddress
+      postalCode
+      room {
+        nextToken
+      }
+      cityPostalCodeStreet
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+query ListRooms(
+  $buildingId: ID
+  $roomId: ModelIDKeyConditionInput
+  $filter: ModelRoomFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listRooms(
+    buildingId: $buildingId
+    roomId: $roomId
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      roomId
+      buildingId
+      name
+      building {
+        buildingId
+        name
+        country
+        city
+        streetAddress
+        postalCode
+        cityPostalCodeStreet
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query GetUsers($userId: ID!) {
+  getUsers(userId: $userId) {
+    userId
+    email
+    phone
+    createdAt
+    updatedAt
+  }
+}
+query ListUserss(
+  $userId: ID
+  $filter: ModelUsersFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listUserss(
+    userId: $userId
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      userId
+      email
+      phone
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query GetBooking($userId: ID!, $bookingId: ID!) {
+  getBooking(userId: $userId, bookingId: $bookingId) {
+    bookingId
+    roomId
+    buildingId
+    userId
+    startTime
+    endTime
+    createdAt
+    updatedAt
+  }
+}
+query ListBookings(
+  $userId: ID
+  $bookingId: ModelIDKeyConditionInput
+  $filter: ModelBookingFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listBookings(
+    userId: $userId
+    bookingId: $bookingId
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      bookingId
+      roomId
+      buildingId
+      userId
+      startTime
+      endTime
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}

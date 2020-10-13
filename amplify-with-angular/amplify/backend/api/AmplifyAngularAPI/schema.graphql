@@ -1,0 +1,68 @@
+type Building @model @key(fields: ["buildingId"]) {
+  buildingId: ID!
+  name: String!
+  country: String!
+  city: String!
+  streetAddress: String!
+  postalCode: String!
+  room: [Room] @connection(fields: ["buildingId"])
+  cityPostalCodeStreet: String
+}
+
+type Room @model @key(fields: ["buildingId", "roomId"]) {
+  roomId: ID!
+  buildingId: ID!
+  name: String!
+  building: Building @connection(fields: ["buildingId"])
+}
+
+type Users @model @key(fields: ["userId"]) {
+  userId: ID!
+  email: String!
+  phone: String!
+}
+
+type Booking @model
+  @key(fields: ["userId", "bookingId"])
+  @key(name: "userBooking", fields: ["userId", "startTime"])
+  @key(name: "roomBooking", fields: ["roomId", "endTime"]) {
+  bookingId: ID!
+  roomId: ID!
+  buildingId: ID!
+  userId: ID!
+  startTime: String!
+  endTime: String!
+}
+
+input CreateBookingInput {
+  bookingId: ID
+  roomId: ID!
+  buildingId: ID!
+  userId: ID!
+  startTime: String!
+  endTime: String!
+}
+
+input CreateBuildingInput {
+  buildingId: ID
+  name: String!
+  country: String!
+  city: String!
+  streetAddress: String!
+  postalCode: String!
+  cityPostalCodeStreet: String
+}
+
+input CreateRoomInput {
+  roomId: ID
+  buildingId: ID!
+  name: String!
+}
+
+type Mutation {
+  createBookingRoom(input: CreateBookingInput!): Booking
+}
+
+type Subscription {
+  onCreateBookingRoom: Booking @aws_subscribe(mutations: ["createBookingRoom"])
+}

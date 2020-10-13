@@ -1,0 +1,13 @@
+## [Start] Set the primary @key. **
+#set( $modelObjectKey = {
+  "buildingId": $util.dynamodb.toDynamoDB($ctx.args.buildingId),
+  "roomId": $util.dynamodb.toDynamoDB($ctx.args.roomId)
+} )
+## [End] Set the primary @key. **
+{
+  "version": "2018-05-29",
+  "operation": "GetItem",
+  "key": #if( $modelObjectKey ) $util.toJson($modelObjectKey) #else {
+  "id": $util.dynamodb.toDynamoDBJson($ctx.args.id)
+} #end
+}

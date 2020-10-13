@@ -1,0 +1,20 @@
+<div class="booking-table">
+  <table>
+    <thead>
+      <th> Booking ID </th>
+      <th> Building ID </th>
+      <th> Room ID </th>
+      <th> Start Time </th>
+      <th> End Time </th>
+      <th> User </th>
+    </thead>
+    <tr *ngFor="let item of bookingList">
+      <td class="booking-item">{{ item?.bookingId }}</td>
+      <td class="booking-item">{{ item?.buildingId }}</td>
+      <td class="booking-item">{{ item?.roomId }}</td>
+      <td class="booking-item">{{ item?.startTime }}</td>
+      <td class="booking-item">{{ item?.endTime }}</td>
+      <td class="booking-item">{{ item?.userId }}</td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,10 @@
+#if($ctx.error)
+  $util.error($ctx.error.message, $ctx.error.type)
+#end
+
+## If has items in duplicated list, return error
+#if( !$ctx.result.Items.isEmpty() )
+  $util.error("Duplicate Time range")
+#end
+
+$util.toJson($ctx.result)

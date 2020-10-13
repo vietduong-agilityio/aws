@@ -1,0 +1,250 @@
+# this is an auto generated file. This will be overwritten
+mutation CreateBookingRoom($input: CreateBookingInput!) {
+  createBookingRoom(input: $input) {
+    bookingId
+    roomId
+    buildingId
+    userId
+    startTime
+    endTime
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateBuilding(
+  $input: CreateBuildingInput!
+  $condition: ModelBuildingConditionInput
+) {
+  createBuilding(input: $input, condition: $condition) {
+    buildingId
+    name
+    country
+    city
+    streetAddress
+    postalCode
+    room {
+      items {
+        roomId
+        buildingId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    cityPostalCodeStreet
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateBuilding(
+  $input: UpdateBuildingInput!
+  $condition: ModelBuildingConditionInput
+) {
+  updateBuilding(input: $input, condition: $condition) {
+    buildingId
+    name
+    country
+    city
+    streetAddress
+    postalCode
+    room {
+      items {
+        roomId
+        buildingId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    cityPostalCodeStreet
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteBuilding(
+  $input: DeleteBuildingInput!
+  $condition: ModelBuildingConditionInput
+) {
+  deleteBuilding(input: $input, condition: $condition) {
+    buildingId
+    name
+    country
+    city
+    streetAddress
+    postalCode
+    room {
+      items {
+        roomId
+        buildingId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    cityPostalCodeStreet
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateRoom(
+  $input: CreateRoomInput!
+  $condition: ModelRoomConditionInput
+) {
+  createRoom(input: $input, condition: $condition) {
+    roomId
+    buildingId
+    name
+    building {
+      buildingId
+      name
+      country
+      city
+      streetAddress
+      postalCode
+      room {
+        nextToken
+      }
+      cityPostalCodeStreet
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateRoom(
+  $input: UpdateRoomInput!
+  $condition: ModelRoomConditionInput
+) {
+  updateRoom(input: $input, condition: $condition) {
+    roomId
+    buildingId
+    name
+    building {
+      buildingId
+      name
+      country
+      city
+      streetAddress
+      postalCode
+      room {
+        nextToken
+      }
+      cityPostalCodeStreet
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteRoom(
+  $input: DeleteRoomInput!
+  $condition: ModelRoomConditionInput
+) {
+  deleteRoom(input: $input, condition: $condition) {
+    roomId
+    buildingId
+    name
+    building {
+      buildingId
+      name
+      country
+      city
+      streetAddress
+      postalCode
+      room {
+        nextToken
+      }
+      cityPostalCodeStreet
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateUsers(
+  $input: CreateUsersInput!
+  $condition: ModelUsersConditionInput
+) {
+  createUsers(input: $input, condition: $condition) {
+    userId
+    email
+    phone
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateUsers(
+  $input: UpdateUsersInput!
+  $condition: ModelUsersConditionInput
+) {
+  updateUsers(input: $input, condition: $condition) {
+    userId
+    email
+    phone
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteUsers(
+  $input: DeleteUsersInput!
+  $condition: ModelUsersConditionInput
+) {
+  deleteUsers(input: $input, condition: $condition) {
+    userId
+    email
+    phone
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateBooking(
+  $input: CreateBookingInput!
+  $condition: ModelBookingConditionInput
+) {
+  createBooking(input: $input, condition: $condition) {
+    bookingId
+    roomId
+    buildingId
+    userId
+    startTime
+    endTime
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateBooking(
+  $input: UpdateBookingInput!
+  $condition: ModelBookingConditionInput
+) {
+  updateBooking(input: $input, condition: $condition) {
+    bookingId
+    roomId
+    buildingId
+    userId
+    startTime
+    endTime
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteBooking(
+  $input: DeleteBookingInput!
+  $condition: ModelBookingConditionInput
+) {
+  deleteBooking(input: $input, condition: $condition) {
+    bookingId
+    roomId
+    buildingId
+    userId
+    startTime
+    endTime
+    createdAt
+    updatedAt
+  }
+}

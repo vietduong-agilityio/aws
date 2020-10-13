@@ -1,0 +1,214 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreateBookingRoom {
+  onCreateBookingRoom {
+    bookingId
+    roomId
+    buildingId
+    userId
+    startTime
+    endTime
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateBuilding {
+  onCreateBuilding {
+    buildingId
+    name
+    country
+    city
+    streetAddress
+    postalCode
+    room {
+      items {
+        roomId
+        buildingId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    cityPostalCodeStreet
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateBuilding {
+  onUpdateBuilding {
+    buildingId
+    name
+    country
+    city
+    streetAddress
+    postalCode
+    room {
+      items {
+        roomId
+        buildingId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    cityPostalCodeStreet
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteBuilding {
+  onDeleteBuilding {
+    buildingId
+    name
+    country
+    city
+    streetAddress
+    postalCode
+    room {
+      items {
+        roomId
+        buildingId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    cityPostalCodeStreet
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateRoom {
+  onCreateRoom {
+    roomId
+    buildingId
+    name
+    building {
+      buildingId
+      name
+      country
+      city
+      streetAddress
+      postalCode
+      room {
+        nextToken
+      }
+      cityPostalCodeStreet
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateRoom {
+  onUpdateRoom {
+    roomId
+    buildingId
+    name
+    building {
+      buildingId
+      name
+      country
+      city
+      streetAddress
+      postalCode
+      room {
+        nextToken
+      }
+      cityPostalCodeStreet
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteRoom {
+  onDeleteRoom {
+    roomId
+    buildingId
+    name
+    building {
+      buildingId
+      name
+      country
+      city
+      streetAddress
+      postalCode
+      room {
+        nextToken
+      }
+      cityPostalCodeStreet
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateUsers {
+  onCreateUsers {
+    userId
+    email
+    phone
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateUsers {
+  onUpdateUsers {
+    userId
+    email
+    phone
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteUsers {
+  onDeleteUsers {
+    userId
+    email
+    phone
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateBooking {
+  onCreateBooking {
+    bookingId
+    roomId
+    buildingId
+    userId
+    startTime
+    endTime
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateBooking {
+  onUpdateBooking {
+    bookingId
+    roomId
+    buildingId
+    userId
+    startTime
+    endTime
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteBooking {
+  onDeleteBooking {
+    bookingId
+    roomId
+    buildingId
+    userId
+    startTime
+    endTime
+    createdAt
+    updatedAt
+  }
+}

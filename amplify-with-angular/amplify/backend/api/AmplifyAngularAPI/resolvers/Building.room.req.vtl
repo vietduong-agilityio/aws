@@ -1,0 +1,75 @@
+#set( $limit = $util.defaultIfNull($context.args.limit, 100) )
+#set( $query = {
+  "expression": "#partitionKey = :partitionKey",
+  "expressionNames": {
+      "#partitionKey": "buildingId"
+  },
+  "expressionValues": {
+      ":partitionKey": {
+          "S": "$context.source.buildingId"
+    }
+  }
+} )
+## [Start] Applying Key Condition **
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.beginsWith) )
+  #set( $query.expression = "$query.expression AND begins_with(#sortKey, :sortKey)" )
+  $util.qr($query.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.roomId.beginsWith" }))
+#end
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.between) )
+  #set( $query.expression = "$query.expression AND #sortKey BETWEEN :sortKey0 AND :sortKey1" )
+  $util.qr($query.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($query.expressionValues.put(":sortKey0", { "S": "$ctx.args.roomId.between[0]" }))
+  $util.qr($query.expressionValues.put(":sortKey1", { "S": "$ctx.args.roomId.between[1]" }))
+#end
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.eq) )
+  #set( $query.expression = "$query.expression AND #sortKey = :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.roomId.eq" }))
+#end
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.lt) )
+  #set( $query.expression = "$query.expression AND #sortKey < :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.roomId.lt" }))
+#end
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.le) )
+  #set( $query.expression = "$query.expression AND #sortKey <= :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.roomId.le" }))
+#end
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.gt) )
+  #set( $query.expression = "$query.expression AND #sortKey > :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.roomId.gt" }))
+#end
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.ge) )
+  #set( $query.expression = "$query.expression AND #sortKey >= :sortKey" )
+  $util.qr($query.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.roomId.ge" }))
+#end
+## [End] Applying Key Condition **
+{
+  "version": "2018-05-29",
+  "operation": "Query",
+  "query":   $util.toJson($query),
+  "scanIndexForward":   #if( $context.args.sortDirection )
+    #if( $context.args.sortDirection == "ASC" )
+true
+    #else
+false
+    #end
+  #else
+true
+  #end,
+  "filter":   #if( $context.args.filter )
+$util.transform.toDynamoDBFilterExpression($ctx.args.filter)
+  #else
+null
+  #end,
+  "limit": $limit,
+  "nextToken":   #if( $context.args.nextToken )
+$util.toJson($context.args.nextToken)
+  #else
+null
+  #end
+}

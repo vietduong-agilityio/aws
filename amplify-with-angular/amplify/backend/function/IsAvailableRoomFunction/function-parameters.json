@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "api": {
+      "AmplifyAngularAPI": [
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

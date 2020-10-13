@@ -1,0 +1,50 @@
+## [Start] Set default values. **
+#set( $createdAt = $util.time.nowISO8601() )
+## Automatically set the createdAt timestamp. **
+$util.qr($context.args.input.put("createdAt", $util.defaultIfNull($ctx.args.input.createdAt, $createdAt)))
+## Automatically set the updatedAt timestamp. **
+$util.qr($context.args.input.put("updatedAt", $util.defaultIfNull($ctx.args.input.updatedAt, $createdAt)))
+#set( $city = $ctx.args.input.city )
+#set( $streetAddress = $ctx.args.input.streetAddress )
+#set( $postalCode = $ctx.args.input.postalCode )
+#set ($cityPostalCodeStreet = "${city}#${postalCode}#${streetAddress}")
+$util.qr($context.args.input.put("cityPostalCodeStreet", $util.defaultIfNull($ctx.args.input.cityPostalCodeStreet, $cityPostalCodeStreet)))
+## [End] Set default values. **
+
+## [Start] Set the primary @key. **
+#set( $modelObjectKey = {
+  "buildingId": $util.dynamodb.toDynamoDB($ctx.args.input.buildingId)
+} )
+## [End] Set the primary @key. **
+
+## [Start] Prepare DynamoDB PutItem Request. **
+$util.qr($context.args.input.put("__typename", "Building"))
+#set( $condition = {
+  "expression": "attribute_not_exists(#buildingId)",
+  "expressionNames": {
+      "#buildingId": "buildingId"
+  }
+} )
+#if( $context.args.condition )
+  #set( $condition.expressionValues = {} )
+  #set( $conditionFilterExpressions = $util.parseJson($util.transform.toDynamoDBConditionExpression($context.args.condition)) )
+  $util.qr($condition.put("expression", "($condition.expression) AND $conditionFilterExpressions.expression"))
+  $util.qr($condition.expressionNames.putAll($conditionFilterExpressions.expressionNames))
+  $util.qr($condition.expressionValues.putAll($conditionFilterExpressions.expressionValues))
+#end
+#if( $condition.expressionValues && $condition.expressionValues.size() == 0 )
+  #set( $condition = {
+  "expression": $condition.expression,
+  "expressionNames": $condition.expressionNames
+} )
+#end
+{
+  "version": "2018-05-29",
+  "operation": "PutItem",
+  "key": {
+    "buildingId": $util.dynamodb.toDynamoDBJson($util.autoId())
+  },
+  "attributeValues": $util.dynamodb.toMapValuesJson($context.args.input),
+  "condition": $util.toJson($condition)
+}
+## [End] Prepare DynamoDB PutItem Request. **

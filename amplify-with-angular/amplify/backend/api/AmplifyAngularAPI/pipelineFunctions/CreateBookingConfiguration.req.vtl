@@ -1,0 +1,15 @@
+{
+  "operation" : "PutItem",
+  "key" : {
+    "bookingId": $util.dynamodb.toDynamoDBJson($util.autoId()),
+  },
+  "attributeValues" : {
+    "roomId": $util.dynamodb.toDynamoDBJson($ctx.stash.input.roomId),
+    "buildingId": $util.dynamodb.toDynamoDBJson($ctx.stash.input.buildingId),
+    "userId": $util.dynamodb.toDynamoDBJson($ctx.stash.input.userId),
+    "startTime": $util.dynamodb.toDynamoDBJson($ctx.stash.input.startTime),
+    "endTime": $util.dynamodb.toDynamoDBJson($ctx.stash.input.endTime),
+    "createdAt": $util.dynamodb.toDynamoDBJson($$ctx.stash.input.createdAt),
+    "updatedAt": $util.dynamodb.toDynamoDBJson($$ctx.stash.input.updatedAt)
+  }
+}

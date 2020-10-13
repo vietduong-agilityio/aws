@@ -1,0 +1,11 @@
+#set( $inputValues = {} )
+#set( $createdAt = $util.time.nowISO8601() )
+$util.qr($inputValues.put("roomId", $ctx.args.input.roomId))
+$util.qr($inputValues.put("buildingId", $ctx.args.input.buildingId))
+$util.qr($inputValues.put("userId", $ctx.args.input.userId))
+$util.qr($inputValues.put("startTime", $ctx.args.input.startTime))
+$util.qr($inputValues.put("endTime", $ctx.args.input.endTime))
+$util.qr($inputValues.put("createdAt", $createdAt))
+$util.qr($inputValues.put("updatedAt", $createdAt))
+$util.qr($ctx.stash.put("input", $inputValues))
+{}

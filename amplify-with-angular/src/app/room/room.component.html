@@ -1,0 +1,17 @@
+<div class="room-table">
+  <table>
+    <thead>
+      <th>Room ID</th>
+      <th>Building ID</th>
+      <th>Name</th>
+    </thead>
+    <tr *ngFor="let item of roomList">
+      <td class="room-item">{{ item?.roomId }}</td>
+      <td class="room-item">{{ item?.buildingId }}</td>
+      <td class="room-item">{{ item?.name }}</td>
+      <td class="room-item">
+        <a [routerLink]="['/room', item?.roomId, item?.buildingId]" routerLinkActive="active">Add Booking</a>
+      </td>
+    </tr>
+  </table>
+</div>

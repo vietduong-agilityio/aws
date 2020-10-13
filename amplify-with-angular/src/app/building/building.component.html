@@ -1,0 +1,20 @@
+<div class="building-table">
+  <table>
+    <thead>
+      <th>Booking ID</th>
+      <th>City ID</th>
+      <th>Country</th>
+      <th>Name</th>
+      <th>Postal Code</th>
+      <th>Street Address</th>
+    </thead>
+    <tr *ngFor="let item of buildingList">
+      <td class="building-item">{{ item?.buildingId }}</td>
+      <td class="building-item">{{ item?.city }}</td>
+      <td class="building-item">{{ item?.country }}</td>
+      <td class="building-item">{{ item?.name }}</td>
+      <td class="building-item">{{ item?.postalCode }}</td>
+      <td class="building-item">{{ item?.streetAddress }}</td>
+    </tr>
+  </table>
+</div>
