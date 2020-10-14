@@ -1,0 +1,18 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - echo "---------- Start pre-build stage ----------"
+        - cd amplify-with-angular
+        - npm install
+    build:
+      commands:
+        - echo "---------- Startbuild stage ----------"
+        - npm run-script build
+  artifacts:
+    baseDirectory: dist/amplify-with-angular
+    files:
+      - '**/*'
+  cache:
+    paths: []

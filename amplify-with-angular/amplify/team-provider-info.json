@@ -14,9 +14,6 @@
     "categories": {
       "auth": {
         "amplifyangularappe166aebf": {}
-      },
-      "function": {
-        "amplifyangularappe166aebfPreSignup": {}
       }
     }
   }
