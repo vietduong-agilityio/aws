@@ -1,25 +1,27 @@
-<form *ngIf="bookingForm" [formGroup]="bookingForm" (submit)="addBooking()">
-  <div>
-    <label class="cus-form-label">Building ID</label>
-    <input [readonly]="true" class="form-control minimal" id="productName" formControlName="buildingId" required>
-  </div>
-  <div>
-    <label class="cus-form-label">Room ID</label>
-    <input [readonly]="true" class="form-control minimal" id="productName" formControlName="roomId" required>
-  </div>
-  <div>
-    <label class="cus-form-label">User</label>
-    <input class="form-control minimal" id="productName" formControlName="userId" required>
-  </div>
-  <div>
-    <label class="cus-form-label">Start Time</label>
-    <input class="form-control minimal" id="productName" formControlName="startTime" required>
-  </div>
-  <div>
-    <label class="cus-form-label">End Time</label>
-    <input class="form-control minimal" id="productName" formControlName="endTime" required>
-  </div>
+<div class="form-comtainer">
+  <form *ngIf="bookingForm" class="add-booking-form" [formGroup]="bookingForm" (submit)="addBooking()">
+    <div class="form-field">
+      <label class="cus-form-label">Building ID</label>
+      <input [readonly]="true" class="form-control minimal" id="productName" formControlName="buildingId" required>
+    </div>
+    <div class="form-field">
+      <label class="cus-form-label">Room ID</label>
+      <input [readonly]="true" class="form-control minimal" id="productName" formControlName="roomId" required>
+    </div>
+    <div class="form-field">
+      <label class="cus-form-label">User</label>
+      <input class="form-control minimal" id="productName" formControlName="userId" required>
+    </div>
+    <div class="form-field">
+      <label class="cus-form-label">Start Time</label>
+      <input class="form-control minimal" id="productName" formControlName="startTime" required>
+    </div>
+    <div class="form-field">
+      <label class="cus-form-label">End Time</label>
+      <input class="form-control minimal" id="productName" formControlName="endTime" required>
+    </div>
 
-  <button type="submit">Add new Booking</button>
-</form>
-<p *ngIf="informMsg"> {{ informMsg }} </p>
+    <button type="submit" class="add-btn">Add new Booking</button>
+  </form>
+  <p *ngIf="informMsg"> {{ informMsg }} </p>
+</div>

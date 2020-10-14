@@ -10,6 +10,8 @@ import { Room } from '../../type/room';
 export class RoomComponent implements OnInit {
   roomList: Room[] = [];
 
+  displayedColumns: string[] = ['roomId', 'buildingId', 'name', 'action'];
+
   constructor(
     private api: APIService
   ) { }

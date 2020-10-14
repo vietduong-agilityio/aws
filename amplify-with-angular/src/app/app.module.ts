@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +13,7 @@ import { BookingComponent } from './booking/booking.component';
 import { RoomComponent } from './room/room.component';
 import { AddBookingComponent } from './add-booking/add-booking.component';
 import { BuildingComponent } from './building/building.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,10 @@ import { BuildingComponent } from './building/building.component';
     AppRoutingModule,
     AmplifyUIAngularModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatTableModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]

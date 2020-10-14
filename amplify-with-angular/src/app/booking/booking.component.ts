@@ -11,6 +11,8 @@ export class BookingComponent implements OnInit {
 
   bookingList: Booking[] = [];
 
+  displayedColumns: string[] = ['bookingId', 'buildingId', 'roomId', 'startTime', 'endTime', 'userId'];
+
   constructor(
     private api: APIService,
     private cd: ChangeDetectorRef
@@ -24,7 +26,8 @@ export class BookingComponent implements OnInit {
     this.api.OnCreateBookingRoomListener.subscribe((data: any) => {
       if (data && data.value && data.value.data && data.value.data.onCreateBookingRoom) {
         this.bookingList.push(data.value.data.onCreateBookingRoom);
-        this.cd.markForCheck()
+        this.bookingList = [...this.bookingList];
+        this.cd.detectChanges();
       }
     })
   }

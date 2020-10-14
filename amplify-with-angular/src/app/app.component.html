@@ -298,16 +298,19 @@
   }
 </style>
 <amplify-authenticator>
-  <div>
-    <amplify-sign-out></amplify-sign-out>
+  <div class="container">
+    <div class="nav-bar">
+      <nav class="nav-list">
+        <ul class="nav-menu">
+          <li class="nav-item"><a routerLink="/building" routerLinkActive="active">Building Component</a></li>
+          <li class="nav-item"><a routerLink="/booking" routerLinkActive="active">Booking Component</a></li>
+          <li class="nav-item"><a routerLink="/room" routerLinkActive="active">Room Component</a></li>
+        </ul>
+      </nav>
+
+      <amplify-sign-out></amplify-sign-out>
+    </div>
+
+    <router-outlet></router-outlet>
   </div>
 </amplify-authenticator>
-<nav>
-  <ul>
-    <li><a routerLink="/building" routerLinkActive="active">Building Component</a></li>
-    <li><a routerLink="/booking" routerLinkActive="active">Booking Component</a></li>
-    <li><a routerLink="/room" routerLinkActive="active">Room Component</a></li>
-  </ul>
-</nav>
-
-<router-outlet></router-outlet>

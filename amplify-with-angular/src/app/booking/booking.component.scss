@@ -1,4 +1,13 @@
+.booking-table {
+  width: 100%;
+  padding: 0 60px;
+}
+
 .booking-item {
   padding: 5px;
   border: 1px solid;
+}
+
+th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+  padding-left: 0;
 }

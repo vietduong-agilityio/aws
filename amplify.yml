@@ -8,7 +8,7 @@ frontend:
         - npm install
     build:
       commands:
-        - echo "---------- Startbuild stage ----------"
+        - echo "---------- Start build stage ----------"
         - npm run build
   artifacts:
     baseDirectory: amplify-with-angular/dist/amplify-with-angular

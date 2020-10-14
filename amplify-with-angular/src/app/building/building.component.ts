@@ -11,6 +11,8 @@ export class BuildingComponent implements OnInit {
 
   buildingList: Building[];
 
+  displayedColumns: string[] = ['buildingId', 'city', 'country', 'name', 'postalCode', 'streetAddress'];
+
   constructor(
     private api: APIService
   ) { }

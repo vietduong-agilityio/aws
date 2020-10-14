@@ -1,17 +1,26 @@
-<div class="room-table">
-  <table>
-    <thead>
-      <th>Room ID</th>
-      <th>Building ID</th>
-      <th>Name</th>
-    </thead>
-    <tr *ngFor="let item of roomList">
-      <td class="room-item">{{ item?.roomId }}</td>
-      <td class="room-item">{{ item?.buildingId }}</td>
-      <td class="room-item">{{ item?.name }}</td>
-      <td class="room-item">
-        <a [routerLink]="['/room', item?.roomId, item?.buildingId]" routerLinkActive="active">Add Booking</a>
-      </td>
-    </tr>
-  </table>
-</div>
+<table mat-table [dataSource]="roomList" class="mat-elevation-z8 room-table">
+  <ng-container matColumnDef="roomId">
+    <th mat-header-cell *matHeaderCellDef> Room ID </th>
+    <td mat-cell *matCellDef="let element"> {{element.roomId}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="buildingId">
+    <th mat-header-cell *matHeaderCellDef> Building ID </th>
+    <td mat-cell *matCellDef="let element"> {{element.buildingId}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef> Street Address </th>
+    <td mat-cell *matCellDef="let element">
+      <a [routerLink]="['/room', element?.roomId, element?.buildingId]" routerLinkActive="active">Add Booking</a>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
