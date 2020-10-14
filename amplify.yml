@@ -9,9 +9,9 @@ frontend:
     build:
       commands:
         - echo "---------- Startbuild stage ----------"
-        - npm run-script build
+        - npm run build
   artifacts:
-    baseDirectory: dist/amplify-with-angular
+    baseDirectory: amplify-with-angular/dist/amplify-with-angular
     files:
       - '**/*'
   cache:
