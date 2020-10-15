@@ -29,7 +29,7 @@
     display: flex;
     align-items: center;
 
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 
     .cus-form-label {
       flex-basis: 40%;
@@ -39,6 +39,17 @@
       flex-basis: 60%;
 
       padding: 10px;
+      border: 1px solid gainsboro;
     }
+  }
+
+  .err-msg {
+    color: red;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+
+  .read-only {
+    background-color: gainsboro;
   }
 }

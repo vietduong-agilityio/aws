@@ -2,26 +2,32 @@
   <form *ngIf="bookingForm" class="add-booking-form" [formGroup]="bookingForm" (submit)="addBooking()">
     <div class="form-field">
       <label class="cus-form-label">Building ID</label>
-      <input [readonly]="true" class="form-control minimal" id="productName" formControlName="buildingId" required>
+      <input [readonly]="true" class="form-control minimal read-only" id="productName" formControlName="buildingId" required>
     </div>
     <div class="form-field">
       <label class="cus-form-label">Room ID</label>
-      <input [readonly]="true" class="form-control minimal" id="productName" formControlName="roomId" required>
-    </div>
-    <div class="form-field">
-      <label class="cus-form-label">User</label>
-      <input class="form-control minimal" id="productName" formControlName="userId" required>
+      <input [readonly]="true" class="form-control minimal read-only" id="productName" formControlName="roomId" required>
     </div>
     <div class="form-field">
       <label class="cus-form-label">Start Time</label>
-      <input class="form-control minimal" id="productName" formControlName="startTime" required>
+      <input class="form-control minimal" id="startTime" type="datetime-local" formControlName="startTime" required>
+    </div>
+    <div *ngIf="bookingForm.controls['startTime'].invalid && isSubmitted" class="alert alert-danger">
+      <div class="err-msg" *ngIf="bookingForm.controls['startTime'].errors.required">
+        Start Time is required.
+      </div>
     </div>
     <div class="form-field">
       <label class="cus-form-label">End Time</label>
-      <input class="form-control minimal" id="productName" formControlName="endTime" required>
+      <input class="form-control minimal" id="endTime" type="datetime-local" formControlName="endTime" required>
     </div>
+    <div *ngIf="bookingForm.controls['endTime'].invalid && isSubmitted" class="alert alert-danger">
+      <div class="err-msg" *ngIf="bookingForm.controls['endTime'].errors.required">
+        End Time is required.
+      </div>
+    </div>
+    <p class="err-msg" *ngIf="informMsg && bookingForm.valid"> {{ informMsg }} </p>
 
     <button type="submit" class="add-btn">Add new Booking</button>
   </form>
-  <p *ngIf="informMsg"> {{ informMsg }} </p>
 </div>
