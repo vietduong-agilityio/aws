@@ -5,6 +5,27 @@ mutation CreateBookingRoom($input: CreateBookingInput!) {
     roomId
     buildingId
     userId
+    room {
+      roomId
+      buildingId
+      name
+      building {
+        buildingId
+        name
+        country
+        city
+        streetAddress
+        postalCode
+        room {
+          nextToken
+        }
+        cityPostalCodeStreet
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
     startTime
     endTime
     createdAt
@@ -27,6 +48,17 @@ mutation CreateBuilding(
         roomId
         buildingId
         name
+        building {
+          buildingId
+          name
+          country
+          city
+          streetAddress
+          postalCode
+          cityPostalCodeStreet
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -53,6 +85,17 @@ mutation UpdateBuilding(
         roomId
         buildingId
         name
+        building {
+          buildingId
+          name
+          country
+          city
+          streetAddress
+          postalCode
+          cityPostalCodeStreet
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -79,6 +122,17 @@ mutation DeleteBuilding(
         roomId
         buildingId
         name
+        building {
+          buildingId
+          name
+          country
+          city
+          streetAddress
+          postalCode
+          cityPostalCodeStreet
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -105,6 +159,13 @@ mutation CreateRoom(
       streetAddress
       postalCode
       room {
+        items {
+          roomId
+          buildingId
+          name
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       cityPostalCodeStreet
@@ -131,6 +192,13 @@ mutation UpdateRoom(
       streetAddress
       postalCode
       room {
+        items {
+          roomId
+          buildingId
+          name
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       cityPostalCodeStreet
@@ -157,6 +225,13 @@ mutation DeleteRoom(
       streetAddress
       postalCode
       room {
+        items {
+          roomId
+          buildingId
+          name
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       cityPostalCodeStreet
@@ -212,6 +287,27 @@ mutation CreateBooking(
     roomId
     buildingId
     userId
+    room {
+      roomId
+      buildingId
+      name
+      building {
+        buildingId
+        name
+        country
+        city
+        streetAddress
+        postalCode
+        room {
+          nextToken
+        }
+        cityPostalCodeStreet
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
     startTime
     endTime
     createdAt
@@ -227,6 +323,27 @@ mutation UpdateBooking(
     roomId
     buildingId
     userId
+    room {
+      roomId
+      buildingId
+      name
+      building {
+        buildingId
+        name
+        country
+        city
+        streetAddress
+        postalCode
+        room {
+          nextToken
+        }
+        cityPostalCodeStreet
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
     startTime
     endTime
     createdAt
@@ -242,6 +359,27 @@ mutation DeleteBooking(
     roomId
     buildingId
     userId
+    room {
+      roomId
+      buildingId
+      name
+      building {
+        buildingId
+        name
+        country
+        city
+        streetAddress
+        postalCode
+        room {
+          nextToken
+        }
+        cityPostalCodeStreet
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
     startTime
     endTime
     createdAt

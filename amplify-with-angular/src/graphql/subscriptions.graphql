@@ -5,6 +5,27 @@ subscription OnCreateBookingRoom {
     roomId
     buildingId
     userId
+    room {
+      roomId
+      buildingId
+      name
+      building {
+        buildingId
+        name
+        country
+        city
+        streetAddress
+        postalCode
+        room {
+          nextToken
+        }
+        cityPostalCodeStreet
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
     startTime
     endTime
     createdAt
@@ -24,6 +45,17 @@ subscription OnCreateBuilding {
         roomId
         buildingId
         name
+        building {
+          buildingId
+          name
+          country
+          city
+          streetAddress
+          postalCode
+          cityPostalCodeStreet
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -47,6 +79,17 @@ subscription OnUpdateBuilding {
         roomId
         buildingId
         name
+        building {
+          buildingId
+          name
+          country
+          city
+          streetAddress
+          postalCode
+          cityPostalCodeStreet
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -70,6 +113,17 @@ subscription OnDeleteBuilding {
         roomId
         buildingId
         name
+        building {
+          buildingId
+          name
+          country
+          city
+          streetAddress
+          postalCode
+          cityPostalCodeStreet
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -93,6 +147,13 @@ subscription OnCreateRoom {
       streetAddress
       postalCode
       room {
+        items {
+          roomId
+          buildingId
+          name
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       cityPostalCodeStreet
@@ -116,6 +177,13 @@ subscription OnUpdateRoom {
       streetAddress
       postalCode
       room {
+        items {
+          roomId
+          buildingId
+          name
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       cityPostalCodeStreet
@@ -139,6 +207,13 @@ subscription OnDeleteRoom {
       streetAddress
       postalCode
       room {
+        items {
+          roomId
+          buildingId
+          name
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       cityPostalCodeStreet
@@ -182,6 +257,27 @@ subscription OnCreateBooking {
     roomId
     buildingId
     userId
+    room {
+      roomId
+      buildingId
+      name
+      building {
+        buildingId
+        name
+        country
+        city
+        streetAddress
+        postalCode
+        room {
+          nextToken
+        }
+        cityPostalCodeStreet
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
     startTime
     endTime
     createdAt
@@ -194,6 +290,27 @@ subscription OnUpdateBooking {
     roomId
     buildingId
     userId
+    room {
+      roomId
+      buildingId
+      name
+      building {
+        buildingId
+        name
+        country
+        city
+        streetAddress
+        postalCode
+        room {
+          nextToken
+        }
+        cityPostalCodeStreet
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
     startTime
     endTime
     createdAt
@@ -206,6 +323,27 @@ subscription OnDeleteBooking {
     roomId
     buildingId
     userId
+    room {
+      roomId
+      buildingId
+      name
+      building {
+        buildingId
+        name
+        country
+        city
+        streetAddress
+        postalCode
+        room {
+          nextToken
+        }
+        cityPostalCodeStreet
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
     startTime
     endTime
     createdAt

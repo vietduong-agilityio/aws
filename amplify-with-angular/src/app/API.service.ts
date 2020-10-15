@@ -241,6 +241,30 @@ export type CreateBookingRoomMutation = {
   roomId: string;
   buildingId: string;
   userId: string;
+  room: {
+    __typename: "Room";
+    roomId: string;
+    buildingId: string;
+    name: string;
+    building: {
+      __typename: "Building";
+      buildingId: string;
+      name: string;
+      country: string;
+      city: string;
+      streetAddress: string;
+      postalCode: string;
+      room: {
+        __typename: "ModelRoomConnection";
+        nextToken: string | null;
+      } | null;
+      cityPostalCodeStreet: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
   startTime: string;
   endTime: string;
   createdAt: string;
@@ -262,6 +286,18 @@ export type CreateBuildingMutation = {
       roomId: string;
       buildingId: string;
       name: string;
+      building: {
+        __typename: "Building";
+        buildingId: string;
+        name: string;
+        country: string;
+        city: string;
+        streetAddress: string;
+        postalCode: string;
+        cityPostalCodeStreet: string | null;
+        createdAt: string;
+        updatedAt: string;
+      } | null;
       createdAt: string;
       updatedAt: string;
     } | null> | null;
@@ -287,6 +323,18 @@ export type UpdateBuildingMutation = {
       roomId: string;
       buildingId: string;
       name: string;
+      building: {
+        __typename: "Building";
+        buildingId: string;
+        name: string;
+        country: string;
+        city: string;
+        streetAddress: string;
+        postalCode: string;
+        cityPostalCodeStreet: string | null;
+        createdAt: string;
+        updatedAt: string;
+      } | null;
       createdAt: string;
       updatedAt: string;
     } | null> | null;
@@ -312,6 +360,18 @@ export type DeleteBuildingMutation = {
       roomId: string;
       buildingId: string;
       name: string;
+      building: {
+        __typename: "Building";
+        buildingId: string;
+        name: string;
+        country: string;
+        city: string;
+        streetAddress: string;
+        postalCode: string;
+        cityPostalCodeStreet: string | null;
+        createdAt: string;
+        updatedAt: string;
+      } | null;
       createdAt: string;
       updatedAt: string;
     } | null> | null;
@@ -337,6 +397,14 @@ export type CreateRoomMutation = {
     postalCode: string;
     room: {
       __typename: "ModelRoomConnection";
+      items: Array<{
+        __typename: "Room";
+        roomId: string;
+        buildingId: string;
+        name: string;
+        createdAt: string;
+        updatedAt: string;
+      } | null> | null;
       nextToken: string | null;
     } | null;
     cityPostalCodeStreet: string | null;
@@ -362,6 +430,14 @@ export type UpdateRoomMutation = {
     postalCode: string;
     room: {
       __typename: "ModelRoomConnection";
+      items: Array<{
+        __typename: "Room";
+        roomId: string;
+        buildingId: string;
+        name: string;
+        createdAt: string;
+        updatedAt: string;
+      } | null> | null;
       nextToken: string | null;
     } | null;
     cityPostalCodeStreet: string | null;
@@ -387,6 +463,14 @@ export type DeleteRoomMutation = {
     postalCode: string;
     room: {
       __typename: "ModelRoomConnection";
+      items: Array<{
+        __typename: "Room";
+        roomId: string;
+        buildingId: string;
+        name: string;
+        createdAt: string;
+        updatedAt: string;
+      } | null> | null;
       nextToken: string | null;
     } | null;
     cityPostalCodeStreet: string | null;
@@ -430,6 +514,30 @@ export type CreateBookingMutation = {
   roomId: string;
   buildingId: string;
   userId: string;
+  room: {
+    __typename: "Room";
+    roomId: string;
+    buildingId: string;
+    name: string;
+    building: {
+      __typename: "Building";
+      buildingId: string;
+      name: string;
+      country: string;
+      city: string;
+      streetAddress: string;
+      postalCode: string;
+      room: {
+        __typename: "ModelRoomConnection";
+        nextToken: string | null;
+      } | null;
+      cityPostalCodeStreet: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
   startTime: string;
   endTime: string;
   createdAt: string;
@@ -442,6 +550,30 @@ export type UpdateBookingMutation = {
   roomId: string;
   buildingId: string;
   userId: string;
+  room: {
+    __typename: "Room";
+    roomId: string;
+    buildingId: string;
+    name: string;
+    building: {
+      __typename: "Building";
+      buildingId: string;
+      name: string;
+      country: string;
+      city: string;
+      streetAddress: string;
+      postalCode: string;
+      room: {
+        __typename: "ModelRoomConnection";
+        nextToken: string | null;
+      } | null;
+      cityPostalCodeStreet: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
   startTime: string;
   endTime: string;
   createdAt: string;
@@ -454,6 +586,30 @@ export type DeleteBookingMutation = {
   roomId: string;
   buildingId: string;
   userId: string;
+  room: {
+    __typename: "Room";
+    roomId: string;
+    buildingId: string;
+    name: string;
+    building: {
+      __typename: "Building";
+      buildingId: string;
+      name: string;
+      country: string;
+      city: string;
+      streetAddress: string;
+      postalCode: string;
+      room: {
+        __typename: "ModelRoomConnection";
+        nextToken: string | null;
+      } | null;
+      cityPostalCodeStreet: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
   startTime: string;
   endTime: string;
   createdAt: string;
@@ -475,6 +631,18 @@ export type GetBuildingQuery = {
       roomId: string;
       buildingId: string;
       name: string;
+      building: {
+        __typename: "Building";
+        buildingId: string;
+        name: string;
+        country: string;
+        city: string;
+        streetAddress: string;
+        postalCode: string;
+        cityPostalCodeStreet: string | null;
+        createdAt: string;
+        updatedAt: string;
+      } | null;
       createdAt: string;
       updatedAt: string;
     } | null> | null;
@@ -497,6 +665,14 @@ export type ListBuildingsQuery = {
     postalCode: string;
     room: {
       __typename: "ModelRoomConnection";
+      items: Array<{
+        __typename: "Room";
+        roomId: string;
+        buildingId: string;
+        name: string;
+        createdAt: string;
+        updatedAt: string;
+      } | null> | null;
       nextToken: string | null;
     } | null;
     cityPostalCodeStreet: string | null;
@@ -521,6 +697,14 @@ export type GetRoomQuery = {
     postalCode: string;
     room: {
       __typename: "ModelRoomConnection";
+      items: Array<{
+        __typename: "Room";
+        roomId: string;
+        buildingId: string;
+        name: string;
+        createdAt: string;
+        updatedAt: string;
+      } | null> | null;
       nextToken: string | null;
     } | null;
     cityPostalCodeStreet: string | null;
@@ -546,6 +730,10 @@ export type ListRoomsQuery = {
       city: string;
       streetAddress: string;
       postalCode: string;
+      room: {
+        __typename: "ModelRoomConnection";
+        nextToken: string | null;
+      } | null;
       cityPostalCodeStreet: string | null;
       createdAt: string;
       updatedAt: string;
@@ -584,6 +772,30 @@ export type GetBookingQuery = {
   roomId: string;
   buildingId: string;
   userId: string;
+  room: {
+    __typename: "Room";
+    roomId: string;
+    buildingId: string;
+    name: string;
+    building: {
+      __typename: "Building";
+      buildingId: string;
+      name: string;
+      country: string;
+      city: string;
+      streetAddress: string;
+      postalCode: string;
+      room: {
+        __typename: "ModelRoomConnection";
+        nextToken: string | null;
+      } | null;
+      cityPostalCodeStreet: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
   startTime: string;
   endTime: string;
   createdAt: string;
@@ -598,6 +810,26 @@ export type ListBookingsQuery = {
     roomId: string;
     buildingId: string;
     userId: string;
+    room: {
+      __typename: "Room";
+      roomId: string;
+      buildingId: string;
+      name: string;
+      building: {
+        __typename: "Building";
+        buildingId: string;
+        name: string;
+        country: string;
+        city: string;
+        streetAddress: string;
+        postalCode: string;
+        cityPostalCodeStreet: string | null;
+        createdAt: string;
+        updatedAt: string;
+      } | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null;
     startTime: string;
     endTime: string;
     createdAt: string;
@@ -612,6 +844,30 @@ export type OnCreateBookingRoomSubscription = {
   roomId: string;
   buildingId: string;
   userId: string;
+  room: {
+    __typename: "Room";
+    roomId: string;
+    buildingId: string;
+    name: string;
+    building: {
+      __typename: "Building";
+      buildingId: string;
+      name: string;
+      country: string;
+      city: string;
+      streetAddress: string;
+      postalCode: string;
+      room: {
+        __typename: "ModelRoomConnection";
+        nextToken: string | null;
+      } | null;
+      cityPostalCodeStreet: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
   startTime: string;
   endTime: string;
   createdAt: string;
@@ -633,6 +889,18 @@ export type OnCreateBuildingSubscription = {
       roomId: string;
       buildingId: string;
       name: string;
+      building: {
+        __typename: "Building";
+        buildingId: string;
+        name: string;
+        country: string;
+        city: string;
+        streetAddress: string;
+        postalCode: string;
+        cityPostalCodeStreet: string | null;
+        createdAt: string;
+        updatedAt: string;
+      } | null;
       createdAt: string;
       updatedAt: string;
     } | null> | null;
@@ -658,6 +926,18 @@ export type OnUpdateBuildingSubscription = {
       roomId: string;
       buildingId: string;
       name: string;
+      building: {
+        __typename: "Building";
+        buildingId: string;
+        name: string;
+        country: string;
+        city: string;
+        streetAddress: string;
+        postalCode: string;
+        cityPostalCodeStreet: string | null;
+        createdAt: string;
+        updatedAt: string;
+      } | null;
       createdAt: string;
       updatedAt: string;
     } | null> | null;
@@ -683,6 +963,18 @@ export type OnDeleteBuildingSubscription = {
       roomId: string;
       buildingId: string;
       name: string;
+      building: {
+        __typename: "Building";
+        buildingId: string;
+        name: string;
+        country: string;
+        city: string;
+        streetAddress: string;
+        postalCode: string;
+        cityPostalCodeStreet: string | null;
+        createdAt: string;
+        updatedAt: string;
+      } | null;
       createdAt: string;
       updatedAt: string;
     } | null> | null;
@@ -708,6 +1000,14 @@ export type OnCreateRoomSubscription = {
     postalCode: string;
     room: {
       __typename: "ModelRoomConnection";
+      items: Array<{
+        __typename: "Room";
+        roomId: string;
+        buildingId: string;
+        name: string;
+        createdAt: string;
+        updatedAt: string;
+      } | null> | null;
       nextToken: string | null;
     } | null;
     cityPostalCodeStreet: string | null;
@@ -733,6 +1033,14 @@ export type OnUpdateRoomSubscription = {
     postalCode: string;
     room: {
       __typename: "ModelRoomConnection";
+      items: Array<{
+        __typename: "Room";
+        roomId: string;
+        buildingId: string;
+        name: string;
+        createdAt: string;
+        updatedAt: string;
+      } | null> | null;
       nextToken: string | null;
     } | null;
     cityPostalCodeStreet: string | null;
@@ -758,6 +1066,14 @@ export type OnDeleteRoomSubscription = {
     postalCode: string;
     room: {
       __typename: "ModelRoomConnection";
+      items: Array<{
+        __typename: "Room";
+        roomId: string;
+        buildingId: string;
+        name: string;
+        createdAt: string;
+        updatedAt: string;
+      } | null> | null;
       nextToken: string | null;
     } | null;
     cityPostalCodeStreet: string | null;
@@ -801,6 +1117,30 @@ export type OnCreateBookingSubscription = {
   roomId: string;
   buildingId: string;
   userId: string;
+  room: {
+    __typename: "Room";
+    roomId: string;
+    buildingId: string;
+    name: string;
+    building: {
+      __typename: "Building";
+      buildingId: string;
+      name: string;
+      country: string;
+      city: string;
+      streetAddress: string;
+      postalCode: string;
+      room: {
+        __typename: "ModelRoomConnection";
+        nextToken: string | null;
+      } | null;
+      cityPostalCodeStreet: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
   startTime: string;
   endTime: string;
   createdAt: string;
@@ -813,6 +1153,30 @@ export type OnUpdateBookingSubscription = {
   roomId: string;
   buildingId: string;
   userId: string;
+  room: {
+    __typename: "Room";
+    roomId: string;
+    buildingId: string;
+    name: string;
+    building: {
+      __typename: "Building";
+      buildingId: string;
+      name: string;
+      country: string;
+      city: string;
+      streetAddress: string;
+      postalCode: string;
+      room: {
+        __typename: "ModelRoomConnection";
+        nextToken: string | null;
+      } | null;
+      cityPostalCodeStreet: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
   startTime: string;
   endTime: string;
   createdAt: string;
@@ -825,6 +1189,30 @@ export type OnDeleteBookingSubscription = {
   roomId: string;
   buildingId: string;
   userId: string;
+  room: {
+    __typename: "Room";
+    roomId: string;
+    buildingId: string;
+    name: string;
+    building: {
+      __typename: "Building";
+      buildingId: string;
+      name: string;
+      country: string;
+      city: string;
+      streetAddress: string;
+      postalCode: string;
+      room: {
+        __typename: "ModelRoomConnection";
+        nextToken: string | null;
+      } | null;
+      cityPostalCodeStreet: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
   startTime: string;
   endTime: string;
   createdAt: string;
@@ -845,6 +1233,30 @@ export class APIService {
           roomId
           buildingId
           userId
+          room {
+            __typename
+            roomId
+            buildingId
+            name
+            building {
+              __typename
+              buildingId
+              name
+              country
+              city
+              streetAddress
+              postalCode
+              room {
+                __typename
+                nextToken
+              }
+              cityPostalCodeStreet
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
           startTime
           endTime
           createdAt
@@ -879,6 +1291,18 @@ export class APIService {
               roomId
               buildingId
               name
+              building {
+                __typename
+                buildingId
+                name
+                country
+                city
+                streetAddress
+                postalCode
+                cityPostalCodeStreet
+                createdAt
+                updatedAt
+              }
               createdAt
               updatedAt
             }
@@ -920,6 +1344,18 @@ export class APIService {
               roomId
               buildingId
               name
+              building {
+                __typename
+                buildingId
+                name
+                country
+                city
+                streetAddress
+                postalCode
+                cityPostalCodeStreet
+                createdAt
+                updatedAt
+              }
               createdAt
               updatedAt
             }
@@ -961,6 +1397,18 @@ export class APIService {
               roomId
               buildingId
               name
+              building {
+                __typename
+                buildingId
+                name
+                country
+                city
+                streetAddress
+                postalCode
+                cityPostalCodeStreet
+                createdAt
+                updatedAt
+              }
               createdAt
               updatedAt
             }
@@ -1002,6 +1450,14 @@ export class APIService {
             postalCode
             room {
               __typename
+              items {
+                __typename
+                roomId
+                buildingId
+                name
+                createdAt
+                updatedAt
+              }
               nextToken
             }
             cityPostalCodeStreet
@@ -1043,6 +1499,14 @@ export class APIService {
             postalCode
             room {
               __typename
+              items {
+                __typename
+                roomId
+                buildingId
+                name
+                createdAt
+                updatedAt
+              }
               nextToken
             }
             cityPostalCodeStreet
@@ -1084,6 +1548,14 @@ export class APIService {
             postalCode
             room {
               __typename
+              items {
+                __typename
+                roomId
+                buildingId
+                name
+                createdAt
+                updatedAt
+              }
               nextToken
             }
             cityPostalCodeStreet
@@ -1191,6 +1663,30 @@ export class APIService {
           roomId
           buildingId
           userId
+          room {
+            __typename
+            roomId
+            buildingId
+            name
+            building {
+              __typename
+              buildingId
+              name
+              country
+              city
+              streetAddress
+              postalCode
+              room {
+                __typename
+                nextToken
+              }
+              cityPostalCodeStreet
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
           startTime
           endTime
           createdAt
@@ -1219,6 +1715,30 @@ export class APIService {
           roomId
           buildingId
           userId
+          room {
+            __typename
+            roomId
+            buildingId
+            name
+            building {
+              __typename
+              buildingId
+              name
+              country
+              city
+              streetAddress
+              postalCode
+              room {
+                __typename
+                nextToken
+              }
+              cityPostalCodeStreet
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
           startTime
           endTime
           createdAt
@@ -1247,6 +1767,30 @@ export class APIService {
           roomId
           buildingId
           userId
+          room {
+            __typename
+            roomId
+            buildingId
+            name
+            building {
+              __typename
+              buildingId
+              name
+              country
+              city
+              streetAddress
+              postalCode
+              room {
+                __typename
+                nextToken
+              }
+              cityPostalCodeStreet
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
           startTime
           endTime
           createdAt
@@ -1281,6 +1825,18 @@ export class APIService {
               roomId
               buildingId
               name
+              building {
+                __typename
+                buildingId
+                name
+                country
+                city
+                streetAddress
+                postalCode
+                cityPostalCodeStreet
+                createdAt
+                updatedAt
+              }
               createdAt
               updatedAt
             }
@@ -1319,6 +1875,14 @@ export class APIService {
             postalCode
             room {
               __typename
+              items {
+                __typename
+                roomId
+                buildingId
+                name
+                createdAt
+                updatedAt
+              }
               nextToken
             }
             cityPostalCodeStreet
@@ -1366,6 +1930,14 @@ export class APIService {
             postalCode
             room {
               __typename
+              items {
+                __typename
+                roomId
+                buildingId
+                name
+                createdAt
+                updatedAt
+              }
               nextToken
             }
             cityPostalCodeStreet
@@ -1409,6 +1981,10 @@ export class APIService {
               city
               streetAddress
               postalCode
+              room {
+                __typename
+                nextToken
+              }
               cityPostalCodeStreet
               createdAt
               updatedAt
@@ -1515,6 +2091,30 @@ export class APIService {
           roomId
           buildingId
           userId
+          room {
+            __typename
+            roomId
+            buildingId
+            name
+            building {
+              __typename
+              buildingId
+              name
+              country
+              city
+              streetAddress
+              postalCode
+              room {
+                __typename
+                nextToken
+              }
+              cityPostalCodeStreet
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
           startTime
           endTime
           createdAt
@@ -1547,6 +2147,26 @@ export class APIService {
             roomId
             buildingId
             userId
+            room {
+              __typename
+              roomId
+              buildingId
+              name
+              building {
+                __typename
+                buildingId
+                name
+                country
+                city
+                streetAddress
+                postalCode
+                cityPostalCodeStreet
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+            }
             startTime
             endTime
             createdAt
@@ -1590,6 +2210,30 @@ export class APIService {
           roomId
           buildingId
           userId
+          room {
+            __typename
+            roomId
+            buildingId
+            name
+            building {
+              __typename
+              buildingId
+              name
+              country
+              city
+              streetAddress
+              postalCode
+              room {
+                __typename
+                nextToken
+              }
+              cityPostalCodeStreet
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
           startTime
           endTime
           createdAt
@@ -1619,6 +2263,18 @@ export class APIService {
               roomId
               buildingId
               name
+              building {
+                __typename
+                buildingId
+                name
+                country
+                city
+                streetAddress
+                postalCode
+                cityPostalCodeStreet
+                createdAt
+                updatedAt
+              }
               createdAt
               updatedAt
             }
@@ -1652,6 +2308,18 @@ export class APIService {
               roomId
               buildingId
               name
+              building {
+                __typename
+                buildingId
+                name
+                country
+                city
+                streetAddress
+                postalCode
+                cityPostalCodeStreet
+                createdAt
+                updatedAt
+              }
               createdAt
               updatedAt
             }
@@ -1685,6 +2353,18 @@ export class APIService {
               roomId
               buildingId
               name
+              building {
+                __typename
+                buildingId
+                name
+                country
+                city
+                streetAddress
+                postalCode
+                cityPostalCodeStreet
+                createdAt
+                updatedAt
+              }
               createdAt
               updatedAt
             }
@@ -1716,6 +2396,14 @@ export class APIService {
             postalCode
             room {
               __typename
+              items {
+                __typename
+                roomId
+                buildingId
+                name
+                createdAt
+                updatedAt
+              }
               nextToken
             }
             cityPostalCodeStreet
@@ -1747,6 +2435,14 @@ export class APIService {
             postalCode
             room {
               __typename
+              items {
+                __typename
+                roomId
+                buildingId
+                name
+                createdAt
+                updatedAt
+              }
               nextToken
             }
             cityPostalCodeStreet
@@ -1778,6 +2474,14 @@ export class APIService {
             postalCode
             room {
               __typename
+              items {
+                __typename
+                roomId
+                buildingId
+                name
+                createdAt
+                updatedAt
+              }
               nextToken
             }
             cityPostalCodeStreet
@@ -1847,6 +2551,30 @@ export class APIService {
           roomId
           buildingId
           userId
+          room {
+            __typename
+            roomId
+            buildingId
+            name
+            building {
+              __typename
+              buildingId
+              name
+              country
+              city
+              streetAddress
+              postalCode
+              room {
+                __typename
+                nextToken
+              }
+              cityPostalCodeStreet
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
           startTime
           endTime
           createdAt
@@ -1867,6 +2595,30 @@ export class APIService {
           roomId
           buildingId
           userId
+          room {
+            __typename
+            roomId
+            buildingId
+            name
+            building {
+              __typename
+              buildingId
+              name
+              country
+              city
+              streetAddress
+              postalCode
+              room {
+                __typename
+                nextToken
+              }
+              cityPostalCodeStreet
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
           startTime
           endTime
           createdAt
@@ -1887,6 +2639,30 @@ export class APIService {
           roomId
           buildingId
           userId
+          room {
+            __typename
+            roomId
+            buildingId
+            name
+            building {
+              __typename
+              buildingId
+              name
+              country
+              city
+              streetAddress
+              postalCode
+              room {
+                __typename
+                nextToken
+              }
+              cityPostalCodeStreet
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
           startTime
           endTime
           createdAt

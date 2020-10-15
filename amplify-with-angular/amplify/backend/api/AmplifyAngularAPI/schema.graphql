@@ -30,6 +30,7 @@ type Booking @model
   roomId: ID!
   buildingId: ID!
   userId: ID!
+  room: Room @connection(fields: ["buildingId", "roomId"])
   startTime: String!
   endTime: String!
 }

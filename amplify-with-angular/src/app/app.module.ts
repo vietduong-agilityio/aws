@@ -14,6 +14,9 @@ import { RoomComponent } from './room/room.component';
 import { AddBookingComponent } from './add-booking/add-booking.component';
 import { BuildingComponent } from './building/building.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BuildingFormComponent } from './building-form/building-form.component';
+import { AddBuildingComponent } from './add-building/add-building.component';
+import { UpdateBuildingComponent } from './update-building/update-building.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BookingComponent,
     RoomComponent,
     AddBookingComponent,
-    BuildingComponent
+    BuildingComponent,
+    BuildingFormComponent,
+    AddBuildingComponent,
+    UpdateBuildingComponent
   ],
   imports: [
     BrowserModule,

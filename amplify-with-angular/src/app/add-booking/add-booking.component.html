@@ -1,12 +1,12 @@
 <div class="form-comtainer">
   <form *ngIf="bookingForm" class="add-booking-form" [formGroup]="bookingForm" (submit)="addBooking()">
     <div class="form-field">
-      <label class="cus-form-label">Building ID</label>
-      <input [readonly]="true" class="form-control minimal read-only" id="productName" formControlName="buildingId" required>
+      <label class="cus-form-label">Building</label>
+      <input [readonly]="true" class="form-control minimal read-only" id="building" formControlName="building" required>
     </div>
     <div class="form-field">
-      <label class="cus-form-label">Room ID</label>
-      <input [readonly]="true" class="form-control minimal read-only" id="productName" formControlName="roomId" required>
+      <label class="cus-form-label">Room</label>
+      <input [readonly]="true" class="form-control minimal read-only" id="room" formControlName="room" required>
     </div>
     <div class="form-field">
       <label class="cus-form-label">Start Time</label>

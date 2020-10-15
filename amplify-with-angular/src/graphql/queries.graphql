@@ -12,6 +12,17 @@ query GetBuilding($buildingId: ID!) {
         roomId
         buildingId
         name
+        building {
+          buildingId
+          name
+          country
+          city
+          streetAddress
+          postalCode
+          cityPostalCodeStreet
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -44,6 +55,13 @@ query ListBuildings(
       streetAddress
       postalCode
       room {
+        items {
+          roomId
+          buildingId
+          name
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       cityPostalCodeStreet
@@ -66,6 +84,13 @@ query GetRoom($buildingId: ID!, $roomId: ID!) {
       streetAddress
       postalCode
       room {
+        items {
+          roomId
+          buildingId
+          name
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       cityPostalCodeStreet
@@ -103,6 +128,9 @@ query ListRooms(
         city
         streetAddress
         postalCode
+        room {
+          nextToken
+        }
         cityPostalCodeStreet
         createdAt
         updatedAt
@@ -152,6 +180,27 @@ query GetBooking($userId: ID!, $bookingId: ID!) {
     roomId
     buildingId
     userId
+    room {
+      roomId
+      buildingId
+      name
+      building {
+        buildingId
+        name
+        country
+        city
+        streetAddress
+        postalCode
+        room {
+          nextToken
+        }
+        cityPostalCodeStreet
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
     startTime
     endTime
     createdAt
@@ -179,6 +228,24 @@ query ListBookings(
       roomId
       buildingId
       userId
+      room {
+        roomId
+        buildingId
+        name
+        building {
+          buildingId
+          name
+          country
+          city
+          streetAddress
+          postalCode
+          cityPostalCodeStreet
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
       startTime
       endTime
       createdAt

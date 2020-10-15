@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { APIService } from '../API.service';
 import { Building } from '../../type/building'
 
@@ -11,10 +13,11 @@ export class BuildingComponent implements OnInit {
 
   buildingList: Building[];
 
-  displayedColumns: string[] = ['buildingId', 'city', 'country', 'name', 'postalCode', 'streetAddress'];
+  displayedColumns: string[] = ['buildingId', 'city', 'country', 'name', 'postalCode', 'streetAddress', 'action'];
 
   constructor(
-    private api: APIService
+    private api: APIService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -27,6 +30,10 @@ export class BuildingComponent implements OnInit {
         this.buildingList.push(data.value.data.onCreateBuilding)
       }
     })
+  }
+
+  linkToAddBuilding() {
+    this.router.navigate(['/add-building']);
   }
 
 }

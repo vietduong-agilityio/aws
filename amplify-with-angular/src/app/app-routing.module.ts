@@ -4,6 +4,8 @@ import { BookingComponent } from './booking/booking.component';
 import { RoomComponent } from './room/room.component';
 import { AddBookingComponent } from './add-booking/add-booking.component';
 import { BuildingComponent } from './building/building.component';
+import { AddBuildingComponent } from './add-building/add-building.component';
+import { UpdateBuildingComponent } from './update-building/update-building.component';
 
 const routes: Routes = [
   {
@@ -21,6 +23,14 @@ const routes: Routes = [
   {
     path: 'building',
     component: BuildingComponent
+  },
+  {
+    path: 'add-building',
+    component: AddBuildingComponent
+  },
+  {
+    path: 'update-building/:id',
+    component: UpdateBuildingComponent
   }
 ];
 

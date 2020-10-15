@@ -5,7 +5,6 @@ import { Auth } from 'aws-amplify';
 
 import { APIService } from '../API.service';
 import { Booking } from '../../type/booking';
-import { Room } from '../../type/room';
 
 @Component({
   selector: 'app-add-booking',
@@ -13,11 +12,6 @@ import { Room } from '../../type/room';
   styleUrls: ['./add-booking.component.scss']
 })
 export class AddBookingComponent implements OnInit {
-  roomDetail: Room = {
-    buildingId: '',
-    roomId: '',
-    name: ''
-  };
   roomId: string;
   buildingId: string;
   userId: string;
@@ -45,13 +39,10 @@ export class AddBookingComponent implements OnInit {
 
     if (this.buildingId && this.roomId) {
       this.api.GetRoom(this.buildingId, this.roomId).then(data => {
-        this.roomDetail.buildingId = data.buildingId;
-        this.roomDetail.roomId = data.roomId;
-        this.roomDetail.name = data.name;
 
         this.bookingForm = this.fb.group({
-          buildingId: [data.buildingId, Validators.required],
-          roomId: [data.roomId, Validators.required],
+          building: [data.building.name, Validators.required],
+          room: [data.name, Validators.required],
           startTime: ['', Validators.required],
           endTime: ['', Validators.required]
         })
@@ -71,8 +62,8 @@ export class AddBookingComponent implements OnInit {
         this.informMsg = '';
 
         const newBooking: Booking = {
-          buildingId: this.bookingForm.value.buildingId,
-          roomId: this.bookingForm.value.roomId,
+          buildingId: this.buildingId,
+          roomId: this.roomId,
           userId: this.userId,
           startTime: startTimeMili.toString(),
           endTime: endTimeMili.toString()

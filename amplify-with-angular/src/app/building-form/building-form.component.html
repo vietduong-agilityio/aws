@@ -1,0 +1,52 @@
+<div class="form-comtainer">
+  <form *ngIf="buildingForm" class="add-building-form" [formGroup]="buildingForm" (submit)="emitBuilding()">
+    <div class="form-field">
+      <label class="cus-form-label">City</label>
+      <input class="form-control minimal" id="city" formControlName="city" required>
+    </div>
+    <div *ngIf="buildingForm.controls['city'].invalid && isSubmitted" class="alert alert-danger">
+      <div class="err-msg" *ngIf="buildingForm.controls['city'].errors.required">
+        City is required.
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="cus-form-label">Country</label>
+      <input class="form-control minimal" id="country" formControlName="country" required>
+    </div>
+    <div *ngIf="buildingForm.controls['country'].invalid && isSubmitted" class="alert alert-danger">
+      <div class="err-msg" *ngIf="buildingForm.controls['country'].errors.required">
+        Country is required.
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="cus-form-label">Name</label>
+      <input class="form-control minimal" id="name" formControlName="name" required>
+    </div>
+    <div *ngIf="buildingForm.controls['name'].invalid && isSubmitted" class="alert alert-danger">
+      <div class="err-msg" *ngIf="buildingForm.controls['name'].errors.required">
+        Name is required.
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="cus-form-label">Postal Code</label>
+      <input class="form-control minimal" id="postalCode" formControlName="postalCode" required>
+    </div>
+    <div *ngIf="buildingForm.controls['postalCode'].invalid && isSubmitted" class="alert alert-danger">
+      <div class="err-msg" *ngIf="buildingForm.controls['postalCode'].errors.required">
+        Postal Code is required.
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="cus-form-label">Street Address</label>
+      <input class="form-control minimal" id="streetAddress" formControlName="streetAddress" required>
+    </div>
+    <div *ngIf="buildingForm.controls['streetAddress'].invalid && isSubmitted" class="alert alert-danger">
+      <div class="err-msg" *ngIf="buildingForm.controls['streetAddress'].errors.required">
+        Street Address is required.
+      </div>
+    </div>
+    <!-- <p class="err-msg" *ngIf="informMsg && bookingForm.valid"> {{ informMsg }} </p> -->
+
+    <button type="submit" class="add-btn">Add new Building</button>
+  </form>
+</div>
