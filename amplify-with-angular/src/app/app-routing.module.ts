@@ -6,6 +6,8 @@ import { AddBookingComponent } from './add-booking/add-booking.component';
 import { BuildingComponent } from './building/building.component';
 import { AddBuildingComponent } from './add-building/add-building.component';
 import { UpdateBuildingComponent } from './update-building/update-building.component';
+import { AddRoomComponent } from './add-room/add-room.component';
+import { UpdateRoomComponent } from './update-room/update-room.component';
 
 const routes: Routes = [
   {
@@ -31,6 +33,14 @@ const routes: Routes = [
   {
     path: 'update-building/:id',
     component: UpdateBuildingComponent
+  },
+  {
+    path: 'add-room',
+    component: AddRoomComponent
+  },
+  {
+    path: 'update-room/:buildingId/:roomId',
+    component: UpdateRoomComponent
   }
 ];
 

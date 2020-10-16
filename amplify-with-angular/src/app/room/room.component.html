@@ -1,3 +1,5 @@
+<button type="button" class="add-btn" (click)="linkToAddRoom()">Add new Room</button>
+
 <table mat-table [dataSource]="roomList" class="mat-elevation-z8 room-table">
   <ng-container matColumnDef="roomId">
     <th mat-header-cell *matHeaderCellDef> Room ID </th>
@@ -17,7 +19,8 @@
   <ng-container matColumnDef="action">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let element">
-      <a [routerLink]="['/room', element?.roomId, element?.buildingId]" routerLinkActive="active">Add Booking</a>
+      <a class="room-link" [routerLink]="['/room', element?.roomId, element?.buildingId]" routerLinkActive="active">Add Booking</a>
+      <a class="room-link" [routerLink]="['/update-room', element?.buildingId, element?.roomId]" routerLinkActive="active">Edit Room</a>
     </td>
   </ng-container>
 

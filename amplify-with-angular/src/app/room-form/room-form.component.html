@@ -1,0 +1,27 @@
+<div class="form-comtainer">
+  <form *ngIf="roomForm" class="add-building-form" [formGroup]="roomForm" (submit)="emitRoom()">
+    <div class="form-field">
+      <label class="cus-form-label">Building</label>
+      <select class="form-control minimal select-control" formControlName="buildingId" [attr.disabled]="isEditMode ? '' : null">
+        <option disabled>Select a Building</option>
+        <option *ngFor="let opt of buildingList" [value]="opt?.buildingId">{{opt?.name}}</option>
+      </select>
+    </div>
+    <div *ngIf="roomForm.controls['buildingId'].invalid && isSubmitted" class="alert alert-danger">
+      <div class="err-msg" *ngIf="roomForm.controls['buildingId'].errors.required">
+        Building is required.
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="cus-form-label">Name</label>
+      <input class="form-control minimal" id="name" formControlName="name" required>
+    </div>
+    <div *ngIf="roomForm.controls['name'].invalid && isSubmitted" class="alert alert-danger">
+      <div class="err-msg" *ngIf="roomForm.controls['name'].errors.required">
+        Name is required.
+      </div>
+    </div>
+
+    <button type="submit" class="add-btn">Submit</button>
+  </form>
+</div>
