@@ -20,6 +20,8 @@ import { UpdateBuildingComponent } from './update-building/update-building.compo
 import { AddRoomComponent } from './add-room/add-room.component';
 import { RoomFormComponent } from './room-form/room-form.component';
 import { UpdateRoomComponent } from './update-room/update-room.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { UpdateRoomComponent } from './update-room/update-room.component';
     UpdateBuildingComponent,
     AddRoomComponent,
     RoomFormComponent,
-    UpdateRoomComponent
+    UpdateRoomComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +46,8 @@ import { UpdateRoomComponent } from './update-room/update-room.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatTableModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

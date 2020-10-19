@@ -90,7 +90,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-amplifyangularapp-dev-150120-deployment",
-          "S3Key": "amplify-builds/deleteRoomFollowBuilding-4a45475365393130576d-build.zip"
+          "S3Key": "amplify-builds/deleteRoomFollowBuilding-514f5059386c5a544b6f-build.zip"
         }
       }
     },

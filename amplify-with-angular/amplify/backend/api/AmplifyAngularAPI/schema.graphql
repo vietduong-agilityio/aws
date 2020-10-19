@@ -54,6 +54,10 @@ input CreateBuildingInput {
   cityPostalCodeStreet: String
 }
 
+input DeleteBuildingInput {
+	buildingId: ID!
+}
+
 input CreateRoomInput {
   roomId: ID
   buildingId: ID!
@@ -62,6 +66,7 @@ input CreateRoomInput {
 
 type Mutation {
   createBookingRoom(input: CreateBookingInput!): Booking
+  deleteBuildingRoom(input: DeleteBuildingInput!): Building
 }
 
 type Subscription {

@@ -32,6 +32,40 @@ mutation CreateBookingRoom($input: CreateBookingInput!) {
     updatedAt
   }
 }
+mutation DeleteBuildingRoom($input: DeleteBuildingInput!) {
+  deleteBuildingRoom(input: $input) {
+    buildingId
+    name
+    country
+    city
+    streetAddress
+    postalCode
+    room {
+      items {
+        roomId
+        buildingId
+        name
+        building {
+          buildingId
+          name
+          country
+          city
+          streetAddress
+          postalCode
+          cityPostalCodeStreet
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    cityPostalCodeStreet
+    createdAt
+    updatedAt
+  }
+}
 mutation CreateBuilding(
   $input: CreateBuildingInput!
   $condition: ModelBuildingConditionInput

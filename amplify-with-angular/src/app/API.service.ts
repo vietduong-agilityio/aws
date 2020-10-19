@@ -14,6 +14,10 @@ export type CreateBookingInput = {
   endTime: string;
 };
 
+export type DeleteBuildingInput = {
+  buildingId: string;
+};
+
 export type CreateBuildingInput = {
   buildingId?: string | null;
   name: string;
@@ -83,10 +87,6 @@ export type UpdateBuildingInput = {
   streetAddress?: string | null;
   postalCode?: string | null;
   cityPostalCodeStreet?: string | null;
-};
-
-export type DeleteBuildingInput = {
-  buildingId: string;
 };
 
 export type CreateRoomInput = {
@@ -267,6 +267,43 @@ export type CreateBookingRoomMutation = {
   } | null;
   startTime: string;
   endTime: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type DeleteBuildingRoomMutation = {
+  __typename: "Building";
+  buildingId: string;
+  name: string;
+  country: string;
+  city: string;
+  streetAddress: string;
+  postalCode: string;
+  room: {
+    __typename: "ModelRoomConnection";
+    items: Array<{
+      __typename: "Room";
+      roomId: string;
+      buildingId: string;
+      name: string;
+      building: {
+        __typename: "Building";
+        buildingId: string;
+        name: string;
+        country: string;
+        city: string;
+        streetAddress: string;
+        postalCode: string;
+        cityPostalCodeStreet: string | null;
+        createdAt: string;
+        updatedAt: string;
+      } | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null> | null;
+    nextToken: string | null;
+  } | null;
+  cityPostalCodeStreet: string | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -1270,6 +1307,55 @@ export class APIService {
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
     return <CreateBookingRoomMutation>response.data.createBookingRoom;
+  }
+  async DeleteBuildingRoom(
+    input: DeleteBuildingInput
+  ): Promise<DeleteBuildingRoomMutation> {
+    const statement = `mutation DeleteBuildingRoom($input: DeleteBuildingInput!) {
+        deleteBuildingRoom(input: $input) {
+          __typename
+          buildingId
+          name
+          country
+          city
+          streetAddress
+          postalCode
+          room {
+            __typename
+            items {
+              __typename
+              roomId
+              buildingId
+              name
+              building {
+                __typename
+                buildingId
+                name
+                country
+                city
+                streetAddress
+                postalCode
+                cityPostalCodeStreet
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          cityPostalCodeStreet
+          createdAt
+          updatedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <DeleteBuildingRoomMutation>response.data.deleteBuildingRoom;
   }
   async CreateBuilding(
     input: CreateBuildingInput,

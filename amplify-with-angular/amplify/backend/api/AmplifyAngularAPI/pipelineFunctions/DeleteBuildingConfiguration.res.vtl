@@ -1,0 +1,7 @@
+#if( $ctx.error )
+$util.error($ctx.error.message, $ctx.error.type)
+#else
+#set( $outputValues = $ctx.result )
+$util.qr($ctx.stash.put("output", $outputValues))
+$util.toJson($ctx.result)
+#end

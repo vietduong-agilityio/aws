@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { APIService } from '../API.service';
 import { Room } from '../../type/room';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-room',
@@ -15,7 +17,8 @@ export class RoomComponent implements OnInit {
 
   constructor(
     private api: APIService,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -26,6 +29,23 @@ export class RoomComponent implements OnInit {
 
   linkToAddRoom() {
     this.router.navigate(['/add-room']);
+  }
+
+  openDialog(buildingId, roomId) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: 'Do you want to delete this Room? You can not reverse this action!'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.api.DeleteRoom({
+          buildingId: buildingId,
+          roomId: roomId
+        }).then(data => {
+          window.location.reload()
+        });
+      }
+    });
   }
 
 }

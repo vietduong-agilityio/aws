@@ -291,6 +291,268 @@
         }
       },
       "DependsOn": ["IsAvailableRoomFunctionConfiguration", "CreateBookingConfiguration"]
+    },
+
+    "DeleteBuildingLambdaDataSourceRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Fn::If": [
+            "HasEnvironmentParameter",
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "DeleteBuildingLambdaDataSource",
+                  {
+                    "Ref": "AppSyncApiId"
+                  },
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "-",
+                [
+                  "DeleteBuildingLambdaDataSource",
+                  {
+                    "Ref": "AppSyncApiId"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "InvokeLambdaFunction",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": ["lambda:InvokeFunction"],
+                  "Resource": {
+                    "Fn::If": [
+                      "HasEnvironmentParameter",
+                      {
+                        "Fn::Sub": [
+                          "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:deleteRoomFollowBuilding-${env}",
+                          {
+                            "env": {
+                              "Ref": "env"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "Fn::Sub": [
+                          "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:deleteRoomFollowBuilding",
+                          {}
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+
+    "DeleteBuildingLambdaDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "DeleteBuildingLambdaDataSource",
+        "Type": "AWS_LAMBDA",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": ["DeleteBuildingLambdaDataSourceRole", "Arn"]
+        },
+        "LambdaConfig": {
+          "LambdaFunctionArn": {
+            "Fn::If": [
+              "HasEnvironmentParameter",
+              {
+                "Fn::Sub": [
+                  "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:deleteRoomFollowBuilding-${env}",
+                  {
+                    "env": {
+                      "Ref": "env"
+                    }
+                  }
+                ]
+              },
+              {
+                "Fn::Sub": ["arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:deleteRoomFollowBuilding", {}]
+              }
+            ]
+          }
+        }
+      },
+      "DependsOn": "DeleteBuildingLambdaDataSourceRole"
+    },
+
+    "DeleteBuildingConfiguration": {
+      "Type": "AWS::AppSync::FunctionConfiguration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "DeleteBuildingConfiguration",
+        "DataSourceName": "BuildingTable",
+        "FunctionVersion": "2018-05-29",
+        "RequestMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/pipelineFunctions/${ResolverFileName}",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              },
+              "ResolverFileName": {
+                "Fn::Join": [".", ["DeleteBuildingConfiguration", "req", "vtl"]]
+              }
+            }
+          ]
+        },
+        "ResponseMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/pipelineFunctions/${ResolverFileName}",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              },
+              "ResolverFileName": {
+                "Fn::Join": [".", ["DeleteBuildingConfiguration", "res", "vtl"]]
+              }
+            }
+          ]
+        }
+      }
+    },
+
+    "DeleteRoomFollowBuildingConfiguration": {
+      "Type": "AWS::AppSync::FunctionConfiguration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "DeleteRoomFollowBuildingConfiguration",
+        "DataSourceName": "DeleteBuildingLambdaDataSource",
+        "FunctionVersion": "2018-05-29",
+        "RequestMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/pipelineFunctions/${ResolverFileName}",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              },
+              "ResolverFileName": {
+                "Fn::Join": [".", ["DeleteRoomFollowBuilding", "req", "vtl"]]
+              }
+            }
+          ]
+        },
+        "ResponseMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/pipelineFunctions/${ResolverFileName}",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              },
+              "ResolverFileName": {
+                "Fn::Join": [".", ["DeleteRoomFollowBuilding", "res", "vtl"]]
+              }
+            }
+          ]
+        }
+      },
+      "DependsOn": "DeleteBuildingLambdaDataSource"
+    },
+
+    "DeleteBuildingLambdaResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "TypeName": "Mutation",
+        "FieldName": "deleteBuildingRoom",
+        "Kind": "PIPELINE",
+        "PipelineConfig": {
+          "Functions": [
+            {
+              "Fn::GetAtt": ["DeleteBuildingConfiguration", "FunctionId"]
+            },
+            {
+              "Fn::GetAtt": ["DeleteRoomFollowBuildingConfiguration", "FunctionId"]
+            }
+          ]
+        },
+        "RequestMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              },
+              "ResolverFileName": {
+                "Fn::Join": [".", ["Mutation", "deleteBuilding", "req", "vtl"]]
+              }
+            }
+          ]
+        },
+        "ResponseMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              },
+              "ResolverFileName": {
+                "Fn::Join": [".", ["Mutation", "deleteBuilding", "res", "vtl"]]
+              }
+            }
+          ]
+        }
+      },
+      "DependsOn": ["DeleteBuildingConfiguration", "DeleteRoomFollowBuildingConfiguration"]
     }
   },
   "Conditions": {

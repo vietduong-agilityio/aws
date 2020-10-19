@@ -35,10 +35,10 @@ exports.handler = (event, context, callback) => {
 
       if (deleteList.length) {
         const deleteParams = {
-          RequestItems: {
-            tableName: deleteList
-          }
+          RequestItems: {}
         };
+
+        deleteParams.RequestItems[tableName] = deleteList
 
         docClient.batchWrite(deleteParams, function(err, data) {
           if (err) {
