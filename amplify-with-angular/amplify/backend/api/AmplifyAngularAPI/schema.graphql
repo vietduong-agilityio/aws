@@ -64,9 +64,15 @@ input CreateRoomInput {
   name: String!
 }
 
+input DeleteRoomInput {
+  buildingId: ID!
+  roomId: ID!
+}
+
 type Mutation {
   createBookingRoom(input: CreateBookingInput!): Booking
   deleteBuildingRoom(input: DeleteBuildingInput!): Building
+  deleteRoomBooking(input: DeleteRoomInput!): Room
 }
 
 type Subscription {

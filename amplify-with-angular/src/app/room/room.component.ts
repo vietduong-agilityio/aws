@@ -33,16 +33,16 @@ export class RoomComponent implements OnInit {
 
   openDialog(buildingId, roomId) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: 'Do you want to delete this Room? You can not reverse this action!'
+      data: 'Do you want to delete this Room? This will delete the related Bookings!'
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.api.DeleteRoom({
+        this.api.DeleteRoomBooking({
           buildingId: buildingId,
           roomId: roomId
         }).then(data => {
-          window.location.reload()
+          this.roomList = this.roomList.filter(item => item.roomId !== roomId);
         });
       }
     });

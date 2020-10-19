@@ -45,12 +45,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "deleteRoomFollowBuilding",
+            "deleteBookingFollowRoom",
             {
               "Fn::Join": [
                 "",
                 [
-                  "deleteRoomFollowBuilding",
+                  "deleteBookingFollowRoom",
                   "-",
                   {
                     "Ref": "env"
@@ -90,7 +90,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-amplifyangularapp-dev-150120-deployment",
-          "S3Key": "amplify-builds/deleteRoomFollowBuilding-426c525a6f5155514f70-build.zip"
+          "S3Key": "amplify-builds/deleteBookingFollowRoom-565a327163614251482b-build.zip"
         }
       }
     },
@@ -100,12 +100,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "amplifyangularappLambdaRoleaaebb932",
+            "amplifyangularappLambdaRoleddec5497",
             {
               "Fn::Join": [
                 "",
                 [
-                  "amplifyangularappLambdaRoleaaebb932",
+                  "amplifyangularappLambdaRoleddec5497",
                   "-",
                   {
                     "Ref": "env"
@@ -244,13 +244,13 @@
         }
       }
     },
-    "LambdaTriggerPolicyRoom": {
+    "LambdaTriggerPolicyBooking": {
       "DependsOn": [
         "LambdaExecutionRole"
       ],
       "Type": "AWS::IAM::Policy",
       "Properties": {
-        "PolicyName": "amplify-lambda-execution-policy-Room",
+        "PolicyName": "amplify-lambda-execution-policy-Booking",
         "Roles": [
           {
             "Ref": "LambdaExecutionRole"
@@ -269,7 +269,7 @@
               ],
               "Resource": {
                 "Fn::ImportValue": {
-                  "Fn::Sub": "${apiAmplifyAngularAPIGraphQLAPIIdOutput}:GetAtt:RoomTable:StreamArn"
+                  "Fn::Sub": "${apiAmplifyAngularAPIGraphQLAPIIdOutput}:GetAtt:BookingTable:StreamArn"
                 }
               }
             }
@@ -277,10 +277,10 @@
         }
       }
     },
-    "LambdaEventSourceMappingRoom": {
+    "LambdaEventSourceMappingBooking": {
       "Type": "AWS::Lambda::EventSourceMapping",
       "DependsOn": [
-        "LambdaTriggerPolicyRoom",
+        "LambdaTriggerPolicyBooking",
         "LambdaExecutionRole"
       ],
       "Properties": {
@@ -288,7 +288,7 @@
         "Enabled": true,
         "EventSourceArn": {
           "Fn::ImportValue": {
-            "Fn::Sub": "${apiAmplifyAngularAPIGraphQLAPIIdOutput}:GetAtt:RoomTable:StreamArn"
+            "Fn::Sub": "${apiAmplifyAngularAPIGraphQLAPIIdOutput}:GetAtt:BookingTable:StreamArn"
           }
         },
         "FunctionName": {
