@@ -11,6 +11,8 @@ import { APIService } from '../API.service';
 export class UpdateBuildingComponent implements OnInit {
   buildingId: string;
 
+  isLoading: boolean = true;
+
   building: Building = {
     city: '',
     country: '',
@@ -39,7 +41,9 @@ export class UpdateBuildingComponent implements OnInit {
             postalCode: data.postalCode,
             streetAddress: data.streetAddress
           }
-        )
+        );
+
+        this.isLoading = false;
       })
     }
   }
@@ -53,8 +57,14 @@ export class UpdateBuildingComponent implements OnInit {
     )
 
     this.api.UpdateBuilding(updateObj).then(data => {
+      this.isLoading = false;
+
       this.router.navigate(['/building']);
     })
+  }
+
+  cancelUpdateBuilding() {
+    this.router.navigate(['/building']);
   }
 
 }

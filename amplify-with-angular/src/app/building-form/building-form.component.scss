@@ -5,9 +5,10 @@
     margin: 0 auto;
     width: 35%;
 
-    .add-btn {
-      background-color: #007bff;
-      border-color: #007bff;
+    .add-btn,
+    .cancel-btn {
+      margin-top: 20px;
+      cursor: pointer;
       color: #fff;
       display: inline-block;
       font-weight: 400;
@@ -22,6 +23,18 @@
       line-height: 1.5;
       border-radius: .25rem;
       transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    .add-btn {
+      background-color: #007bff;
+      border-color: #007bff;
+
+      margin-right: 5px;
+    }
+
+    .cancel-btn {
+      background-color:#6c757d;
+      border-color:#6c757d;
     }
   }
 
@@ -51,5 +64,13 @@
 
   .read-only {
     background-color: gainsboro;
+  }
+
+  .spinner-custom {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    box-shadow: none;
+    background-color: transparent;
   }
 }

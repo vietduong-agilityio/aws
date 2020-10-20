@@ -1,1 +1,6 @@
-<app-building-form [building]="building" (newBuilding)="updateBuilding($event)"></app-building-form>
+<app-building-form
+  [building]="building"
+  [isLoading]="isLoading"
+  (newBuilding)="updateBuilding($event)"
+  (cancel)="cancelUpdateBuilding()"
+></app-building-form>

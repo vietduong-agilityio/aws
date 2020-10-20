@@ -15,6 +15,8 @@ export class AddRoomComponent implements OnInit {
     name: ''
   }
 
+  isLoading: boolean = false;
+
   buildingList: Building[] = [];
 
   constructor(
@@ -30,8 +32,14 @@ export class AddRoomComponent implements OnInit {
 
   addRoom($event) {
     this.api.CreateRoom($event).then(data => {
+      this.isLoading = false;
+
       this.router.navigate(['/room']);
     })
+  }
+
+  cancelAddRoom() {
+    this.router.navigate(['/room']);
   }
 
 }

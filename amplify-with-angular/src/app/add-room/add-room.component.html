@@ -1,1 +1,7 @@
-<app-room-form [room]="room" [buildingList]="buildingList" (newRoom)="addRoom($event)"></app-room-form>
+<app-room-form
+  [room]="room"
+  [buildingList]="buildingList"
+  [isLoading]="isLoading"
+  (newRoom)="addRoom($event)"
+  (cancel)="cancelAddRoom()">
+</app-room-form>

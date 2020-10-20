@@ -18,6 +18,8 @@ export class AddBuildingComponent implements OnInit {
     streetAddress: ''
   }
 
+  isLoading: boolean = false;
+
   constructor(
     private api: APIService,
     private router: Router
@@ -28,8 +30,13 @@ export class AddBuildingComponent implements OnInit {
 
   addBuilding($event) {
     this.api.CreateBuilding($event).then(data => {
+      this.isLoading = false;
       this.router.navigate(['/building']);
     })
+  }
+
+  cancelAddBuilding() {
+    this.router.navigate(['/building']);
   }
 
 }

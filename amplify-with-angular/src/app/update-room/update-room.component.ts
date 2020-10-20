@@ -18,6 +18,8 @@ export class UpdateRoomComponent implements OnInit {
     name: ''
   }
 
+  isLoading: boolean = true;
+
   buildingList: Building[] = [];
 
   constructor(
@@ -42,7 +44,9 @@ export class UpdateRoomComponent implements OnInit {
             buildingId: data.buildingId,
             name: data.name
           }
-        )
+        );
+
+        this.isLoading = false;
       })
     }
   }
@@ -56,8 +60,14 @@ export class UpdateRoomComponent implements OnInit {
     )
 
     this.api.UpdateRoom(updateObj).then(data => {
+      this.isLoading = false;
+
       this.router.navigate(['/room']);
     })
+  }
+
+  cancelUpdateRoom() {
+    this.router.navigate(['/room']);
   }
 
 }

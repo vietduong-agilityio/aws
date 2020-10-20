@@ -22,6 +22,8 @@ import { RoomFormComponent } from './room-form/room-form.component';
 import { UpdateRoomComponent } from './update-room/update-room.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     BrowserAnimationsModule,
     MatTableModule,
     MatFormFieldModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCardModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -13,6 +13,8 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 export class RoomComponent implements OnInit {
   roomList: Room[] = [];
 
+  isLoading: boolean = true;
+
   displayedColumns: string[] = ['roomId', 'buildingId', 'name', 'action'];
 
   constructor(
@@ -24,6 +26,8 @@ export class RoomComponent implements OnInit {
   ngOnInit(): void {
     this.api.ListRooms().then(data => {
       this.roomList = data.items || [];
+
+      this.isLoading = false;
     })
   }
 
@@ -38,10 +42,14 @@ export class RoomComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.isLoading = true;
+
         this.api.DeleteRoomBooking({
           buildingId: buildingId,
           roomId: roomId
         }).then(data => {
+          this.isLoading = false;
+
           this.roomList = this.roomList.filter(item => item.roomId !== roomId);
         });
       }

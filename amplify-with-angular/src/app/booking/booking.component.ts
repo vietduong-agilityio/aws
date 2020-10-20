@@ -13,6 +13,8 @@ export class BookingComponent implements OnInit {
 
   bookingList: Booking[] = [];
 
+  isLoading: boolean = true;
+
   displayedColumns: string[] = ['bookingId', 'buildingId', 'roomId', 'startTime', 'endTime', 'userId', 'action'];
 
   constructor(
@@ -24,6 +26,8 @@ export class BookingComponent implements OnInit {
   ngOnInit(): void {
     this.api.ListBookings().then(data => {
       this.bookingList = data.items || [];
+
+      this.isLoading = false;
     });
 
     this.api.OnCreateBookingRoomListener.subscribe((data: any) => {
@@ -42,10 +46,14 @@ export class BookingComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.isLoading = true;
+
         this.api.DeleteBooking({
           userId: userId,
           bookingId: bookingId
         }).then(data => {
+          this.isLoading = false;
+
           this.bookingList = this.bookingList.filter(item => item.bookingId !== bookingId);
         })
       }

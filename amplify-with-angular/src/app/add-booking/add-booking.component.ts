@@ -22,6 +22,8 @@ export class AddBookingComponent implements OnInit {
 
   isSubmitted: boolean = false;
 
+  isLoading: boolean = true;
+
   constructor(
     private activatedroute: ActivatedRoute,
     private api: APIService,
@@ -45,7 +47,9 @@ export class AddBookingComponent implements OnInit {
           room: [data.name, Validators.required],
           startTime: ['', Validators.required],
           endTime: ['', Validators.required]
-        })
+        });
+
+        this.isLoading = false;
       })
     }
   }
@@ -53,10 +57,14 @@ export class AddBookingComponent implements OnInit {
   addBooking() {
     this.isSubmitted = true;
     if (this.bookingForm.valid && this.userId) {
+      this.isLoading = true;
+
       const startTimeMili = new Date(this.bookingForm.value.startTime).getTime();
       const endTimeMili = new Date(this.bookingForm.value.endTime).getTime();
 
       if (startTimeMili >= endTimeMili) {
+        this.isLoading = false;
+
         this.informMsg = 'Start Time need smaller then End Time!';
       } else {
         this.informMsg = '';
@@ -70,12 +78,20 @@ export class AddBookingComponent implements OnInit {
         };
 
         this.api.CreateBookingRoom(newBooking).then(data => {
+          this.isLoading = false;
+
           this.router.navigate(['/booking']);
         },
         err => {
+          this.isLoading = false;
+
           this.informMsg = `Error! ${err.errors[0].message}`;
         });
       }
     }
+  }
+
+  onCancel() {
+    this.router.navigate(['/room']);
   }
 }

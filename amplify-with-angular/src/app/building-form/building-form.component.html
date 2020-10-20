@@ -47,6 +47,14 @@
     </div>
     <!-- <p class="err-msg" *ngIf="informMsg && bookingForm.valid"> {{ informMsg }} </p> -->
 
-    <button type="submit" class="add-btn">Submit</button>
+    <button type="submit" class="add-btn" [attr.disabled]="isLoading ? '' : null">Submit</button>
+    <button type="button" class="cancel-btn" (click)="onCancel()" [attr.disabled]="isLoading ? '' : null">Cancel</button>
   </form>
+
+  <mat-card *ngIf="isLoading" class="spinner-custom">
+    <mat-progress-spinner
+      color="primary"
+      mode="indeterminate">
+    </mat-progress-spinner>
+  </mat-card>
 </div>

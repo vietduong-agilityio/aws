@@ -10,7 +10,9 @@ import { Building } from 'src/type/building';
 })
 export class BuildingFormComponent implements OnInit, OnChanges {
   @Input() building: Building;
+  @Input() isLoading: boolean = false;
   @Output() newBuilding = new EventEmitter<Building>();
+  @Output() cancel = new EventEmitter();
 
   buildingForm: FormGroup;
 
@@ -36,6 +38,8 @@ export class BuildingFormComponent implements OnInit, OnChanges {
   emitBuilding() {
     this.isSubmitted = true;
     if (this.buildingForm.valid) {
+      this.isLoading = true;
+
       const builingObj: Building = {
         city: this.buildingForm.value.city,
         country: this.buildingForm.value.country,
@@ -46,6 +50,10 @@ export class BuildingFormComponent implements OnInit, OnChanges {
 
       this.newBuilding.emit(builingObj);
     }
+  }
+
+  onCancel() {
+    this.cancel.emit();
   }
 
 }

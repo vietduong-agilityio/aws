@@ -12,7 +12,9 @@ export class RoomFormComponent implements OnInit, OnChanges {
   @Input() buildingList: Building[] = [];
   @Input() room: Room;
   @Input() isEditMode: boolean = false;
+  @Input() isLoading: boolean = false;
   @Output() newRoom = new EventEmitter<Room>();
+  @Output() cancel = new EventEmitter();
 
   roomForm: FormGroup;
 
@@ -37,6 +39,8 @@ export class RoomFormComponent implements OnInit, OnChanges {
   emitRoom() {
     this.isSubmitted = true;
     if (this.roomForm.valid) {
+      this.isLoading = true;
+
       const roomObj: Room = {
         buildingId: this.roomForm.value.buildingId,
         name: this.roomForm.value.name
@@ -44,6 +48,10 @@ export class RoomFormComponent implements OnInit, OnChanges {
 
       this.newRoom.emit(roomObj);
     }
+  }
+
+  onCancel() {
+    this.cancel.emit();
   }
 
 }

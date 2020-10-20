@@ -72,3 +72,17 @@ th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:
   border-radius: .25rem;
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
+
+.no-data {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.spinner-custom {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  box-shadow: none;
+  background-color: transparent;
+}

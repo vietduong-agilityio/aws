@@ -13,7 +13,9 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 })
 export class BuildingComponent implements OnInit {
 
-  buildingList: Building[];
+  buildingList: Building[] = [];
+
+  isLoading = true;
 
   displayedColumns: string[] = ['buildingId', 'city', 'country', 'name', 'postalCode', 'streetAddress', 'action'];
 
@@ -26,6 +28,8 @@ export class BuildingComponent implements OnInit {
   ngOnInit() {
     this.api.ListBuildings().then(data => {
       this.buildingList = data.items || [];
+
+      this.isLoading = false;
     })
 
     this.api.OnCreateBuildingListener.subscribe((data: any) => {
@@ -46,9 +50,12 @@ export class BuildingComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.isLoading = true;
+
         this.api.DeleteBuildingRoom({
           buildingId: buildingId
         }).then(data => {
+          this.isLoading = false;
           this.buildingList = this.buildingList.filter(item => item.buildingId !== buildingId)
         });
       }
