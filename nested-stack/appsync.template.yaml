@@ -1,0 +1,598 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: The template for AppSync resources
+Parameters:
+  APIName:
+    Type: String
+    Description: The name of AppSync API, be used to generate resources name (prefix ${APIName})
+    MinLength: 5
+    MaxLength: 16
+    AllowedPattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
+  UserPoolId:
+    Type: String
+  UserTableName:
+    Type: String
+  BuildingTableName:
+    Type: String
+  RoomTableName:
+    Type: String
+  BookingTableName:
+    Type: String
+  LambdaFunctionArn:
+    Type: String
+Resources:
+  # ------------------------- IAM Resources --------------------------------
+  AppSyncDynamoDBPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: IAM Policy to grant permission for AppSync access to DynamoDB
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:DeleteItem
+              - dynamodb:UpdateItem
+              - dynamodb:Query
+              - dynamodb:Scan
+              - dynamodb:BatchGetItem
+              - dynamodb:BatchWriteItem
+            Resource:
+              - !Sub
+                - arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${UserTableName}*
+                - { UserTableName: !Ref UserTableName }
+              - !Sub
+                - arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${BuildingTableName}*
+                - { BuildingTableName: !Ref BuildingTableName }
+              - !Sub
+                - arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${RoomTableName}*
+                - { RoomTableName: !Ref RoomTableName }
+              - !Sub
+                - arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${BookingTableName}*
+                - { BookingTableName: !Ref BookingTableName }
+  AppSyncDynamoDBRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${APIName}-appsync-dynamodb-role
+      ManagedPolicyArns:
+        - Ref: AppSyncDynamoDBPolicy
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - appsync.amazonaws.com
+    DependsOn:
+      - AppSyncDynamoDBPolicy
+  AppSyncLambdaPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: IAM Policy to grant permission for AppSync call Lambda function
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - lambda:InvokeFunction
+            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:isAvailableRoomFunction
+  AppSyncLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${APIName}-appsync-lambda-role
+      ManagedPolicyArns:
+        - Ref: AppSyncLambdaPolicy
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - appsync.amazonaws.com
+  # ------------------------- END IAM Resources ----------------------------
+
+  # ------------------------- AppSync API ----------------------------------
+  AppSyncApi:
+    Type: AWS::AppSync::GraphQLApi
+    Properties:
+      Name: !Sub ${APIName}-appsync-api
+      AuthenticationType: AMAZON_COGNITO_USER_POOLS
+      AdditionalAuthenticationProviders:
+        -  AuthenticationType: AWS_IAM
+      UserPoolConfig:
+        AwsRegion: !Sub ${AWS::Region}
+        DefaultAction: "ALLOW"
+        UserPoolId: !Ref UserPoolId
+  AppSyncSchemas:
+    Type: AWS::AppSync::GraphQLSchema
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      DefinitionS3Location: ../appsync/schema.graphql
+  # ---------------------------- END AppSync API ------------------------------
+
+  # ---------------------------- AppSync DataSource ---------------------------
+  AppSyncUserTableDataSource:
+    Type: AWS::AppSync::DataSource
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      Description: DataSource for User table
+      Name: !Sub ${APIName}_user_datasource
+      Type: AMAZON_DYNAMODB
+      ServiceRoleArn: !GetAtt AppSyncDynamoDBRole.Arn
+      DynamoDBConfig:
+        TableName: !Ref UserTableName
+        AwsRegion: !Sub ${AWS::Region}
+  AppSyncBuildingTableDataSource:
+    Type: AWS::AppSync::DataSource
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      Description: DataSource for Building table
+      Name: !Sub ${APIName}_bulding_datasource
+      Type: AMAZON_DYNAMODB
+      ServiceRoleArn: !GetAtt AppSyncDynamoDBRole.Arn
+      DynamoDBConfig:
+        TableName: !Ref BuildingTableName
+        AwsRegion: !Sub ${AWS::Region}
+  AppSyncRoomTableDataSource:
+    Type: AWS::AppSync::DataSource
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      Description: DataSource for Room table
+      Name: !Sub ${APIName}_room_datasource
+      Type: AMAZON_DYNAMODB
+      ServiceRoleArn: !GetAtt AppSyncDynamoDBRole.Arn
+      DynamoDBConfig:
+        TableName: !Ref RoomTableName
+        AwsRegion: !Sub ${AWS::Region}
+  AppSyncBookingTableDataSource:
+    Type: AWS::AppSync::DataSource
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      Description: DataSource for Booking table
+      Name: !Sub ${APIName}_booking_datasource
+      Type: AMAZON_DYNAMODB
+      ServiceRoleArn: !GetAtt AppSyncDynamoDBRole.Arn
+      DynamoDBConfig:
+        TableName: !Ref BookingTableName
+        AwsRegion: !Sub ${AWS::Region}
+  AppSyncBookingLambdaDataSource:
+    Type: AWS::AppSync::DataSource
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      Description: DataSource for Booking Lambda function
+      Name: !Sub ${APIName}_lambda_datasource
+      Type: AWS_LAMBDA
+      ServiceRoleArn: !GetAtt AppSyncLambdaRole.Arn
+      LambdaConfig:
+        LambdaFunctionArn: !Ref LambdaFunctionArn
+  # --------------------------- END AppSync DataSources ---------------------------------
+
+  # --------------------------- AppSync Resolvers ---------------------------------------
+  AppSyncAddUserMutation:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Mutation
+      FieldName: addUser
+      DataSourceName: !GetAtt AppSyncUserTableDataSource.Name
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "PutItem",
+          "key": {
+            "userId": $util.dynamodb.toDynamoDBJson($ctx.identity.sub)
+          },
+          "attributeValues": {
+            "email": $util.dynamodb.toDynamoDBJson($ctx.args.input.email),
+            "phone": $util.dynamodb.toDynamoDBJson($ctx.args.input.phone),
+            "firstName": $util.dynamodb.toDynamoDBJson($ctx.args.input.firstName),
+            "lastName": $util.dynamodb.toDynamoDBJson($ctx.args.input.lastName)
+          }
+        }
+      ResponseMappingTemplate: |
+        #if($ctx.error)
+          $util.error($ctx.error.message, $ctx.error.type)
+        #end
+        $utils.toJson($ctx.result)
+  AppSyncGetBuildingQuery:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Query
+      FieldName: getBuilding
+      DataSourceName: !GetAtt AppSyncBuildingTableDataSource.Name
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "GetItem",
+          "key": {
+            "buildingId": $util.dynamodb.toDynamoDBJson($ctx.args.id)
+          }
+        }
+      ResponseMappingTemplate: |
+        $utils.toJson($ctx.result)
+  AppSyncListBuildingQuery:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Query
+      FieldName: listBuilding
+      DataSourceName: !GetAtt AppSyncBuildingTableDataSource.Name
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "Scan",
+          "limit": $util.defaultIfNull($ctx.args.limit, 20),
+          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null))
+        }
+      ResponseMappingTemplate: |
+        {
+          "items": $util.toJson($context.result.items),
+          "nextToken": $util.toJson($context.result.nextToken)
+        }
+  AppSyncQueryBuilding:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Query
+      FieldName: queryBuilding
+      DataSourceName: !GetAtt AppSyncBuildingTableDataSource.Name
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "Query",
+          "index": "building-country-index",
+          "limit": $util.defaultIfNull($ctx.args.limit, 20),
+          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
+
+          #set($filterString = "")
+          #set($expressionString = "country = :country")
+
+          ## Check if filter has city
+          #if($ctx.args.input.city)
+            #set($filterString = $ctx.args.input.city)
+          #end
+
+          ## Check if filter has postalCode
+          #if($ctx.args.input.postalCode)
+            #set($filterString = "${filterString}#$ctx.args.input.postalCode")
+          #end
+
+          ## Check if filter has streetAddress
+          #if($ctx.args.input.streetAddress)
+            #set($filterString = "${filterString}#$ctx.args.input.streetAddress")
+          #end
+
+          ## If has filter, concat filter to expression string
+          #if(!${filterString.isEmpty()})
+            #set($expressionString = "${expressionString} AND begins_with(cityPostalCodeStreet, :cpc)")
+          #end
+
+          "query": {
+            "expression": "${expressionString}",
+            #if(!${filterString.isEmpty()})
+              "expressionValues": {
+                ":country": $util.dynamodb.toDynamoDBJson($ctx.args.input.country),
+                ":cpc": {
+                  "S": "${filterString}"
+                }
+              }
+            #else
+              "expressionValues": {
+                ":country": $util.dynamodb.toDynamoDBJson($ctx.args.input.country)
+              }
+            #end
+          }
+        }
+      ResponseMappingTemplate: |
+        {
+          "items": $util.toJson($context.result.items),
+          "nextToken": $util.toJson($context.result.nextToken)
+        }
+  AppSyncListRoomByBuildingQuery:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Query
+      FieldName: listRoomByBuiding
+      DataSourceName: !GetAtt AppSyncRoomTableDataSource.Name
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "Query",
+          "limit": $util.defaultIfNull($ctx.args.limit, 20),
+          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
+          "query": {
+            "expression": "buildingId = :buildingId",
+            "expressionValues": {
+              ":buildingId": $util.dynamodb.toDynamoDBJson($ctx.args.buildingId)
+            }
+          }
+        }
+      ResponseMappingTemplate: $util.toJson($ctx.result)
+  AppSyncUpdateUserMutation:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Mutation
+      FieldName: updateUser
+      DataSourceName: !GetAtt AppSyncUserTableDataSource.Name
+      RequestMappingTemplate: |
+        {
+          "version" : "2017-02-28",
+          "operation" : "UpdateItem",
+          "key" : {
+            "userId": $util.dynamodb.toDynamoDBJson($ctx.args.userId),
+          },
+          "update": {
+            "expression": "SET firstName = :firstName, lastName = :lastName, #email = :email, #phone = :phone",
+            "expressionNames": {
+              "#email": "email",
+              "#phone": "phone"
+            },
+            "expressionValues": {
+              ":firstName": $util.dynamodb.toDynamoDBJson($ctx.args.input.firstName),
+              ":lastName": $util.dynamodb.toDynamoDBJson($ctx.args.input.lastName),
+              ":email": $util.dynamodb.toDynamoDBJson($ctx.args.input.email),
+              ":phone": $util.dynamodb.toDynamoDBJson($ctx.args.input.phone)
+            }
+          },
+          "condition": {
+            "expression": "attribute_exists(#userId)",
+            "expressionNames": {
+              "#userId": "userId",
+            },
+          }
+        }
+      ResponseMappingTemplate: $util.toJson($ctx.result)
+  AppSyncAddBookingMutation:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Mutation
+      FieldName: addBooking
+      Kind: PIPELINE
+      PipelineConfig:
+        Functions:
+          - !GetAtt IsAvailableRoomFunction.FunctionId
+          - !GetAtt AddBookingFunction.FunctionId
+      RequestMappingTemplate: |
+        #set( $inputValues = {} )
+        $util.qr($inputValues.put("roomId", $ctx.args.input.roomId))
+        $util.qr($inputValues.put("buildingId", $ctx.args.input.buildingId))
+        $util.qr($inputValues.put("userId", $ctx.args.input.userId))
+        $util.qr($inputValues.put("startTime", $ctx.args.input.startTime))
+        $util.qr($inputValues.put("endTime", $ctx.args.input.endTime))
+        $util.qr($ctx.stash.put("input", $inputValues))
+        {}
+      ResponseMappingTemplate: $util.toJson($ctx.result)
+  IsAvailableRoomFunction:
+    Type: AWS::AppSync::FunctionConfiguration
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      Name: isAvailableRoom
+      Description: Function to check new Booking is duplicated with another existing or not
+      DataSourceName: !GetAtt AppSyncBookingLambdaDataSource.Name
+      FunctionVersion: "2018-05-29"
+      RequestMappingTemplate: |
+        {
+          "operation": "Invoke",
+          "payload": {
+            "roomId": "$ctx.args.input.roomId",
+            "startTime": "$ctx.args.input.startTime",
+            "endTime": "$ctx.args.input.endTime"
+          }
+        }
+      ResponseMappingTemplate: |
+        #if($ctx.error)
+          $util.error($ctx.error.message, $ctx.error.type)
+        #end
+
+        ## If has items in duplicated list, return error
+        #if( !$ctx.result.Items.isEmpty() )
+          $util.error("Duplicate Time range")
+        #end
+
+        $util.toJson($ctx.result)
+  AddBookingFunction:
+    Type: AWS::AppSync::FunctionConfiguration
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      Name: addBooking
+      Description: Function to add new Booking of an User
+      DataSourceName: !GetAtt AppSyncBookingTableDataSource.Name
+      FunctionVersion: "2018-05-29"
+      RequestMappingTemplate: |
+        {
+          "operation" : "PutItem",
+          "key" : {
+            "bookingId": $util.dynamodb.toDynamoDBJson($util.autoId()),
+          },
+          "attributeValues" : {
+            "roomId": $util.dynamodb.toDynamoDBJson($ctx.stash.input.roomId),
+            "buildingId": $util.dynamodb.toDynamoDBJson($ctx.stash.input.buildingId),
+            "userId": $util.dynamodb.toDynamoDBJson($ctx.stash.input.userId),
+            "startTime": $util.dynamodb.toDynamoDBJson($ctx.stash.input.startTime),
+            "endTime": $util.dynamodb.toDynamoDBJson($ctx.stash.input.endTime)
+          }
+        }
+      ResponseMappingTemplate: |
+        ## Raise a GraphQL field error in case of a datasource invocation error
+        #if($ctx.error)
+          $util.error($ctx.error.message, $ctx.error.type)
+        #end
+        ## Pass back the result from DynamoDB. **
+        $util.toJson($ctx.result)
+  AppSyncListBookingByUserQuery:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Query
+      FieldName: listBookingByUser
+      DataSourceName: !GetAtt AppSyncBookingTableDataSource.Name
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "Query",
+          "limit": $util.defaultIfNull($ctx.args.limit, 20),
+          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
+          "index": "user-booking-index",
+          "query": {
+            "expression": "userId = :userId",
+            "expressionValues": {
+              ":userId": $util.dynamodb.toDynamoDBJson($ctx.args.userId)
+            }
+          }
+        }
+      ResponseMappingTemplate: |
+        #if($ctx.error)
+          $util.error($ctx.error.message, $ctx.error.type)
+        #end
+        $util.toJson($ctx.result)
+  AppSyncGetUserQuery:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Query
+      FieldName: getUser
+      DataSourceName: !GetAtt AppSyncUserTableDataSource.Name
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "GetItem",
+          "key": {
+            "userId": $util.dynamodb.toDynamoDBJson($ctx.args.id)
+          }
+        }
+      ResponseMappingTemplate: |
+        $utils.toJson($ctx.result)
+  AppSyncGetRoomQuery:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Query
+      FieldName: getRoom
+      DataSourceName: !GetAtt AppSyncRoomTableDataSource.Name
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "GetItem",
+          "key": {
+            "buildingId": $util.dynamodb.toDynamoDBJson($ctx.args.buildingId),
+            "roomId": $util.dynamodb.toDynamoDBJson($ctx.args.roomId)
+          }
+        }
+      ResponseMappingTemplate: |
+        $utils.toJson($ctx.result)
+  AppSyncAddBuildingMutation:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Mutation
+      FieldName: addBuilding
+      DataSourceName: !GetAtt AppSyncBuildingTableDataSource.Name
+      RequestMappingTemplate: |
+        {
+          "version" : "2017-02-28",
+          "operation" : "PutItem",
+
+          #set( $name = $ctx.args.input.name )
+          #set( $country = $ctx.args.input.country )
+          #set( $city = $ctx.args.input.city )
+          #set( $streetAddress = $ctx.args.input.streetAddress )
+          #set( $postalCode = $ctx.args.input.postalCode )
+          #set ($cityPostalCodeStreet = "${city}#${postalCode}#${streetAddress}")
+          "key" : {
+            "buildingId": $util.dynamodb.toDynamoDBJson($util.autoId()),
+          },
+          "attributeValues" : {
+            "name": $util.dynamodb.toDynamoDBJson($name),
+            "country": $util.dynamodb.toDynamoDBJson($country),
+            "city": $util.dynamodb.toDynamoDBJson($city),
+            "postalCode": $util.dynamodb.toDynamoDBJson($postalCode),
+            "streetAddress": $util.dynamodb.toDynamoDBJson($streetAddress),
+            "cityPostalCodeStreet": $util.dynamodb.toDynamoDBJson($cityPostalCodeStreet)
+          }
+        }
+      ResponseMappingTemplate: |
+        #if($ctx.error)
+          $util.error($ctx.error.message, $ctx.error.type)
+        #end
+        $utils.toJson($ctx.result)
+  AppSyncAddRoomMutation:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Mutation
+      FieldName: addRoom
+      DataSourceName: !GetAtt AppSyncRoomTableDataSource.Name
+      RequestMappingTemplate: |
+        {
+          "version" : "2017-02-28",
+          "operation" : "PutItem",
+          "key" : {
+            "roomId": $util.dynamodb.toDynamoDBJson($util.autoId()),
+          },
+          "attributeValues" : $util.dynamodb.toMapValuesJson($ctx.args)
+        }
+      ResponseMappingTemplate: |
+        #if($ctx.error)
+          $util.error($ctx.error.message, $ctx.error.type)
+        #end
+        $utils.toJson($ctx.result)
+  AppSyncDeleteRoomMutation:
+    Type: AWS::AppSync::Resolver
+    DependsOn: AppSyncSchemas
+    Properties:
+      ApiId: !GetAtt AppSyncApi.ApiId
+      TypeName: Mutation
+      FieldName: deleteRoom
+      DataSourceName: !GetAtt AppSyncRoomTableDataSource.Name
+      RequestMappingTemplate: |
+        {
+          "version" : "2017-02-28",
+          "operation" : "DeleteItem",
+          "key" : {
+            "roomId": $util.dynamodb.toDynamoDBJson($ctx.args.roomId),
+            "buildingId": $util.dynamodb.toDynamoDBJson($ctx.args.buildingId)
+          }
+        }
+      ResponseMappingTemplate: |
+        #if($ctx.error)
+          $util.error($ctx.error.message, $ctx.error.type)
+        #end
+        $utils.toJson($ctx.result)
+  # --------------------------- END AppSync Resolvers -----------------------------------
+Outputs:
+  AppSyncUserTableDataSourceName:
+    Description: The name of User table DataSource
+    Value: !GetAtt AppSyncUserTableDataSource.Name
+  AppSyncBuildingTableDataSourceName:
+    Description: The name of Building table DataSource
+    Value: !GetAtt AppSyncBuildingTableDataSource.Name
+  AppSyncRoomTableDataSourceName:
+    Description: The name of Room table DataSource
+    Value: !GetAtt AppSyncRoomTableDataSource.Name
+  AppSyncBookingTableDataSourceName:
+    Description: The name of Booking table DataSource
+    Value: !GetAtt AppSyncBookingTableDataSource.Name
+  AppSyncBookingLambdaDataSourceName:
+    Description: The name of Booking Lambda function DataSource
+    Value: !GetAtt AppSyncBookingLambdaDataSource.Name

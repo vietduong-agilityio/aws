@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: The practice to combine Amazon Cognito, DynamoDB, Lambda, IAM, AppSync
+Parameters:
+  APIName:
+    Type: String
+    Description: The name of AppSync API, be used to generate resources name (prefix ${APIName})
+    MinLength: 5
+    MaxLength: 16
+    AllowedPattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
+Resources:
+  # ----------------------- Cognito ---------------------------------
+  CognitoStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ./nested-stack/cognito.template.yaml
+      Parameters:
+        APIName: !Ref APIName
+        TriggerFunc: !GetAtt LambdaFunctionStack.Outputs.CognitoTriggerAddUserFunctionArn
+  # ----------------------------- END Cognito ----------------------------
+
+  # ----------------------------- DynamoDB -------------------------------
+  DynamoDBStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ./nested-stack/dynamodb.template.yaml
+  # ---------------------------- END DynamoDB --------------------------------
+
+  # ------------------------------- Lambda functions -----------------------------------
+  LambdaFunctionStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ./nested-stack/lambda.template.yaml
+      Parameters:
+        APIName: !Ref APIName
+        BookingTableName: !GetAtt DynamoDBStack.Outputs.DynamoDBBookingTableName
+
+    # ------------------------------- END Lambda functions --------------------------------
+
+  # ----------------------------- AppSync -------------------------------
+  AppSyncStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ./nested-stack/appsync.template.yaml
+      Parameters:
+        APIName: !Ref APIName
+        UserPoolId: !GetAtt CognitoStack.Outputs.CognitoUserPoolId
+        UserTableName: !GetAtt DynamoDBStack.Outputs.DynamoDBUserTableName
+        BuildingTableName: !GetAtt DynamoDBStack.Outputs.DynamoDBBuildingTableName
+        RoomTableName: !GetAtt DynamoDBStack.Outputs.DynamoDBRoomTableName
+        BookingTableName: !GetAtt DynamoDBStack.Outputs.DynamoDBBookingTableName
+        LambdaFunctionArn: !GetAtt LambdaFunctionStack.Outputs.IsAvailableRoomLambdaFunctionArn
+  # ------------------------------ END AppSync ------------------------------
+

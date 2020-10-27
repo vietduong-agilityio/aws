@@ -1,0 +1,119 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: The stack for DynamoDB resources
+Resources:
+  DynamoDBBuildingTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Building
+      AttributeDefinitions:
+        - AttributeName: buildingId
+          AttributeType: S
+        - AttributeName: country
+          AttributeType: S
+        - AttributeName: cityPostalCodeStreet
+          AttributeType: S
+      KeySchema:
+        - AttributeName: buildingId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      GlobalSecondaryIndexes:
+        - IndexName: building-country-index
+          KeySchema:
+            - AttributeName: country
+              KeyType: HASH
+            - AttributeName: cityPostalCodeStreet
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+  DynamoDBRoomTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Room
+      AttributeDefinitions:
+        - AttributeName: roomId
+          AttributeType: S
+        - AttributeName: buildingId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: buildingId
+          KeyType: HASH
+        - AttributeName: roomId
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  DynamoDBUserTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: User
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  DynamoDBBookingTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Booking
+      AttributeDefinitions:
+        - AttributeName: bookingId
+          AttributeType: S
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: startTime
+          AttributeType: S
+        - AttributeName: roomId
+          AttributeType: S
+        - AttributeName: endTime
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: bookingId
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      LocalSecondaryIndexes:
+        - IndexName: user-booking-index
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: startTime
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      GlobalSecondaryIndexes:
+        - IndexName: room-booking-index
+          KeySchema:
+            - AttributeName: roomId
+              KeyType: HASH
+            - AttributeName: endTime
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+Outputs:
+  DynamoDBBuildingTableName:
+    Description: The name of the DynamoDB Building Table
+    Value: !Ref DynamoDBBuildingTable
+  DynamoDBRoomTableName:
+    Description: The name of the DynamoDB Room Table
+    Value: !Ref DynamoDBRoomTable
+  DynamoDBUserTableName:
+    Description: The name of the DynamoDB User Table
+    Value: !Ref DynamoDBUserTable
+  DynamoDBBookingTableName:
+    Description: The name of the DynamoDB Booking Table
+    Value: !Ref DynamoDBBookingTable

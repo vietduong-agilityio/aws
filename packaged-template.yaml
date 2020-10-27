@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: The practice to combine Amazon Cognito, DynamoDB, Lambda, IAM, AppSync
+Parameters:
+  APIName:
+    Type: String
+    Description: The name of AppSync API, be used to generate resources name (prefix
+      ${APIName})
+    MinLength: 5
+    MaxLength: 16
+    AllowedPattern: ^[a-zA-Z][a-zA-Z0-9_]*$
+Resources:
+  CognitoStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.us-east-2.amazonaws.com/my-bucket-practice/03dc9074a24ee34acbcad12f81c5aa86.template
+      Parameters:
+        APIName:
+          Ref: APIName
+        TriggerFunc:
+          Fn::GetAtt:
+          - LambdaFunctionStack
+          - Outputs.CognitoTriggerAddUserFunctionArn
+  DynamoDBStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.us-east-2.amazonaws.com/my-bucket-practice/b33e6694c9291154c601ea1b81664f64.template
+  LambdaFunctionStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.us-east-2.amazonaws.com/my-bucket-practice/e1a218a56797f35724b26109b095d80f.template
+      Parameters:
+        APIName:
+          Ref: APIName
+        BookingTableName:
+          Fn::GetAtt:
+          - DynamoDBStack
+          - Outputs.DynamoDBBookingTableName
+  AppSyncStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.us-east-2.amazonaws.com/my-bucket-practice/34e4866c82891c1fa043c4a71b24413a.template
+      Parameters:
+        APIName:
+          Ref: APIName
+        UserPoolId:
+          Fn::GetAtt:
+          - CognitoStack
+          - Outputs.CognitoUserPoolId
+        UserTableName:
+          Fn::GetAtt:
+          - DynamoDBStack
+          - Outputs.DynamoDBUserTableName
+        BuildingTableName:
+          Fn::GetAtt:
+          - DynamoDBStack
+          - Outputs.DynamoDBBuildingTableName
+        RoomTableName:
+          Fn::GetAtt:
+          - DynamoDBStack
+          - Outputs.DynamoDBRoomTableName
+        BookingTableName:
+          Fn::GetAtt:
+          - DynamoDBStack
+          - Outputs.DynamoDBBookingTableName
+        LambdaFunctionArn:
+          Fn::GetAtt:
+          - LambdaFunctionStack
+          - Outputs.IsAvailableRoomLambdaFunctionArn

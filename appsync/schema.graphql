@@ -1,0 +1,101 @@
+input UserInput {
+  email: String!
+  phone: String!
+  firstName: String!
+  lastName: String!
+}
+
+type User {
+  userId: String!
+  email: String!
+  phone: String!
+  firstName: String!
+  lastName: String!
+}
+
+type Building {
+  buildingId: String!
+  name: String!
+  country: String!
+  city: String!
+  streetAddress: String!
+  postalCode: String!
+  cityPostalCodeStreet: String!
+}
+
+input BuildingInput {
+  country: String!
+  city: String
+  postalCode: String
+  streetAddress: String
+}
+
+input AddBuildingInput {
+  name: String!
+  country: String!
+  city: String!
+  streetAddress: String!
+  postalCode: String!
+}
+
+type BuildingConnection {
+  items: [Building]
+  nextToken: String
+}
+
+type Room {
+  roomId: String
+  name: String
+  buildingId: String
+}
+
+type RoomConnection {
+  items: [Room!]
+  nextToken: String
+}
+
+type Booking {
+  bookingId: String!
+  roomId: String!
+  buildingId: String!
+  userId: String!
+  startTime: String!
+  endTime: String!
+}
+
+type BookingConnection {
+  items: [Booking!],
+  nextToken: String
+}
+
+input BookingInput {
+  roomId: String!
+  buildingId: String!
+  userId: String!
+  startTime: String!
+  endTime: String!
+}
+
+type Query {
+  getBuilding(id: String): Building
+  listBuilding(limit: Int, nextToken: String): BuildingConnection
+  queryBuilding(input: BuildingInput!, limit: Int, nextToken: String): BuildingConnection
+  listRoomByBuiding(buildingId: String!, limit: Int, nextToken: String): RoomConnection
+  listBookingByUser(userId: String!, limit: Int, nextToken: String): BookingConnection
+  getUser(id: String!): User
+  getRoom(buildingId: String!, roomId: String): Room
+}
+
+type Mutation {
+  addUser(input: UserInput!): User
+  updateUser(userId: String!, input: UserInput!): User
+  addBooking(input: BookingInput!): Booking
+  addBuilding(input: AddBuildingInput!): Building
+  addRoom(name: String!, buildingId: String!): Room
+  deleteRoom(roomId: String!, buildingId: String!): Room
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

@@ -1,0 +1,170 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: The template for Lambda functions resources
+Parameters:
+  BookingTableName:
+    Type: String
+  APIName:
+    Type: String
+Resources:
+  # ----------------------- IAM Resources ------------------------------------------
+  LambdaDynamoDBPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: IAM Policy to grant permission for Lambda access to DynamoDB
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: dynamodb:Query
+            Resource:
+              - !Sub
+                - arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${BookingTableName}*
+                - { BookingTableName: !Ref BookingTableName }
+  LambdaDynamoDBRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${APIName}-lambda-dynamodb-role
+      Description: IAM role for Lambda resource access DynamoDB table
+      ManagedPolicyArns:
+        - Ref: LambdaDynamoDBPolicy
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+  CognitoTriggerLambdaAddUserPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: IAM policy to grant permission for Lambda trigger auto add new User
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: logs:CreateLogGroup
+            Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*
+          - Effect: Allow
+            Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/AddUserTrigger:*
+          - Effect: Allow
+            Action: dynamodb:PutItem
+            Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/User
+  LambdaTriggerAddUserRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${APIName}-lambda-trigger-add-user
+      Description: IAM role for trigger Lambda add new User into DynamoDB
+      ManagedPolicyArns:
+        - Ref: CognitoTriggerLambdaAddUserPolicy
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+  # ---------------------------- END IAM Resources -------------------------------
+
+  # ---------------------------- Lambda functions Resources ----------------------
+  IsAvailableRoomLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs12.x
+      FunctionName: isAvailableRoomFunction
+      Code:
+        ZipFile: |
+          const AWS = require("aws-sdk");
+          AWS.config.update({
+            region: "us-east-2"
+          });
+
+          var docClient = new AWS.DynamoDB.DocumentClient();
+
+          const queryFunction = (event, callback, params, items = []) => {
+            docClient.query(params, function(err, data) {
+              if (err) {
+                callback(err, null);
+              } else {
+                items = items.concat(data.Items);
+
+                if (data.LastEvaluatedKey) {
+                  params.ExclusiveStartKey = data.LastEvaluatedKey;
+                  queryFunction(event, callback, params);
+                } else {
+                  data.Items = items;
+                  callback(null, data);
+                }
+              }
+            })
+          }
+
+          exports.handler = (event, context, callback) => {
+            var params = {
+              TableName: "Booking",
+              IndexName: "room-booking-index",
+              KeyConditionExpression: "roomId = :roomId AND (endTime > :startTime)",
+              FilterExpression: "startTime < :endTime",
+              ExpressionAttributeValues: {
+                ":roomId": event.roomId,
+                ":startTime": event.startTime,
+                ":endTime": event.endTime
+              }
+            }
+            queryFunction(event, callback, params);
+          };
+      Role: !GetAtt LambdaDynamoDBRole.Arn
+  CognitoTriggerAddUserFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs12.x
+      FunctionName: AddUserTrigger
+      Code:
+        ZipFile: |
+          var aws = require('aws-sdk');
+          aws.config.update({
+            region: "us-east-2"
+          });
+
+          var ddb = new aws.DynamoDB({apiVersion: '2012-08-10'});
+
+          exports.handler = async (event, context) => {
+            // -- Write data to DDB
+            let ddbParams = {
+              TableName: 'User',
+              Item: {
+                'userId': {S: event.userName},
+                'email': {S: event.request.userAttributes.email},
+                'phone': {S: event.request.userAttributes.phone_number},
+                'firstName': {S: event.request.userAttributes.family_name},
+                'lastName': {S: event.request.userAttributes.given_name},
+              }
+            };
+
+            // Call DynamoDB
+            try {
+              await ddb.putItem(ddbParams).promise()
+              console.log("Success");
+            } catch (err) {
+              console.log("Error", err);
+            }
+
+            console.log("Success: Everything executed correctly");
+            context.done(null, event);
+          };
+      Role: !GetAtt LambdaTriggerAddUserRole.Arn
+Outputs:
+  IsAvailableRoomLambdaFunctionArn:
+    Description: The ARN of IsAvailableRoomLambdaFunction
+    Value: !GetAtt IsAvailableRoomLambdaFunction.Arn
+  CognitoTriggerAddUserFunctionArn:
+    Description: The ARN of CognitoTriggerAddUserFunction
+    Value: !GetAtt CognitoTriggerAddUserFunction.Arn
