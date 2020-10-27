@@ -1,0 +1,269 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: The Practic ECS with CodePipeline
+Parameters:
+  CodeCommitRepoName:
+    Type: String
+  CodeCommitCloneUrl:
+    Type: String
+  ECSClusterName:
+    Type: String
+  ECSServiceName:
+    Type: String
+Resources:
+  # CodeBuild resources
+  CodeBuildPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: IAM Policy for CodeBuild
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource:
+              - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/*
+          - Effect: Allow
+            Action:
+              - s3:PutObject
+              - s3:GetObject
+              - s3:GetObjectVersion
+              - s3:GetBucketAcl
+              - s3:GetBucketLocation
+            Resource:
+              - arn:aws:s3:::practice-ecs-bucket
+              - arn:aws:s3:::practice-ecs-bucket/*
+          - Effect: Allow
+            Action:
+              - codecommit:GitPull
+            Resource:
+              - !Sub
+                - arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:${ECSPipelinePracticeRepo}
+                - { ECSPipelinePracticeRepo: !Ref CodeCommitRepoName }
+          - Effect: Allow
+            Action:
+              - codebuild:CreateReportGroup
+              - codebuild:CreateReport
+              - codebuild:UpdateReport
+              - codebuild:BatchPutTestCases
+              - codebuild:BatchPutCodeCoverages
+            Resource:
+              - !Sub arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/*
+          - Effect: Allow
+            Action:
+              - secretsmanager:GetSecretValue
+            Resource:
+              - !Sub arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:*
+          - Effect: Allow
+            Action:
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+              - ecr:BatchCheckLayerAvailability
+              - ecr:PutImage
+              - ecr:InitiateLayerUpload
+              - ecr:UploadLayerPart
+              - ecr:CompleteLayerUpload
+              - ecr:GetAuthorizationToken
+            Resource: '*'
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: codebuild-practice-role
+      ManagedPolicyArns:
+        - !Ref CodeBuildPolicy
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+  CodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: CodeBuildPipelineProject
+      Source:
+        Type: CODECOMMIT
+        Location: !Ref CodeCommitCloneUrl
+      SourceVersion: master
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Type: LINUX_CONTAINER
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
+        PrivilegedMode: true
+      Artifacts:
+        Type: NO_ARTIFACTS
+      LogsConfig:
+        CloudWatchLogs:
+          Status: ENABLED
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+
+  # CodePipeline resources
+  PipelinePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: IAM Policy for CodePipeline
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - codecommit:GetBranch
+              - codecommit:GetCommit
+              - codecommit:UploadArchive
+              - codecommit:GetUploadArchiveStatus
+            Resource:
+              - !Sub
+                - arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:${ECSPipelinePracticeRepo}
+                - { ECSPipelinePracticeRepo: !Ref CodeCommitRepoName }
+          - Effect: Allow
+            Action:
+              - ecs:DescribeServices
+              - ecs:DescribeTaskDefinition
+              - ecs:DescribeTasks
+              - ecs:ListTasks
+              - ecs:RegisterTaskDefinition
+              - ecs:UpdateService
+              - iam:PassRole
+            Resource:
+              - '*'
+          - Effect: Allow
+            Action:
+              - s3:*
+            Resource:
+              - arn:aws:s3:::practice-ecs-bucket
+              - arn:aws:s3:::practice-ecs-bucket/*
+          - Effect: Allow
+            Action:
+              - codebuild:StartBuild
+              - codebuild:BatchGetBuilds
+            Resource:
+              - !GetAtt CodeBuildProject.Arn
+  PipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: pipeline-practice-role
+      ManagedPolicyArns:
+        - Ref: PipelinePolicy
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - codepipeline.amazonaws.com
+  CodePipelinePractice:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: ECSPipelinePractice
+      RoleArn: !GetAtt PipelineRole.Arn
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: SourceAction
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Version: 1
+                Provider: CodeCommit
+              OutputArtifacts:
+                - Name: SourceOutput
+              Configuration:
+                BranchName: master
+                RepositoryName: !Ref CodeCommitRepoName
+                PollForSourceChanges: false
+              RunOrder: 1
+        - Name: Build
+          Actions:
+            - Name: BuildAction
+              InputArtifacts:
+                - Name: SourceOutput
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: 1
+                Provider: CodeBuild
+              OutputArtifacts:
+                - Name: BuildOutput
+              Configuration:
+                BatchEnabled: false
+                ProjectName: !Ref CodeBuildProject
+        - Name: Deploy
+          Actions:
+            - Name: DeployAction
+              InputArtifacts:
+                - Name: SourceOutput
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: 1
+                Provider: ECS
+              Configuration:
+                ClusterName: !Ref ECSClusterName
+                ServiceName: !Ref ECSServiceName
+                FileName: imagedefinitions.json
+              RunOrder: 1
+      ArtifactStore:
+        Type: S3
+        Location: practice-ecs-bucket
+
+  # CloudWatch resources
+  CloudWatchRulePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: IAM Policy for CloudWatch start Pipeline execution
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: codepipeline:StartPipelineExecution
+            Resource: !Sub
+              - arn:aws:codepipeline:${AWS::Region}:${AWS::AccountId}:${PipelineSource}
+              - { PipelineSource: !Ref CodePipelinePractice }
+  CloudWatchRuleRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: cloudwatch-pipeline-role
+      ManagedPolicyArns:
+        - Ref: CloudWatchRulePolicy
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - events.amazonaws.com
+  EventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: The CloudWatch Event Rule to detect change on CodeCommit and start Pipeline execution
+      Name: PipelineEventRule
+      EventPattern:
+        source:
+          - aws.codecommit
+        detail-type:
+          - CodeCommit Repository State Change
+        resources:
+          - !Sub
+            - arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:${ECSPipelinePracticeRepo}
+            - { ECSPipelinePracticeRepo: !Ref CodeCommitRepoName }
+        detail:
+          referenceType:
+            - branch
+          referenceName:
+            - master
+      RoleArn: !GetAtt CloudWatchRuleRole.Arn
+      Targets:
+        - Id: 1
+          Arn: !Sub
+            - arn:aws:codepipeline:${AWS::Region}:${AWS::AccountId}:${PipelineSource}
+            - { PipelineSource: !Ref CodePipelinePractice }
+          RoleArn: !GetAtt CloudWatchRuleRole.Arn

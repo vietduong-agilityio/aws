@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: The practice to combine ECS, CodePipeline and CloudFormation
+Parameters:
+  CodeCommitRepoName:
+    Type: String
+  CodeCommitCloneUrl:
+    Type: String
+  ECRRepoName:
+    Type: String
+Resources:
+  ECSStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.us-east-2.amazonaws.com/practice-ecs-bucket/4f79ffd6327d99917d110846eb974af9.template
+      Parameters:
+        ECRRepositoryName:
+          Ref: ECRRepoName
+  CodePipelineStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn:
+    - ECSStack
+    Properties:
+      TemplateURL: https://s3.us-east-2.amazonaws.com/practice-ecs-bucket/54365ee143c566aac7400a6b90e57c7b.template
+      Parameters:
+        CodeCommitRepoName:
+          Ref: CodeCommitRepoName
+        CodeCommitCloneUrl:
+          Ref: CodeCommitCloneUrl
+        ECSClusterName:
+          Fn::GetAtt:
+          - ECSStack
+          - Outputs.ECSCluster
+        ECSServiceName:
+          Fn::GetAtt:
+          - ECSStack
+          - Outputs.ECSService

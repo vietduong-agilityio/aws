@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: The practice to combine ECS, CodePipeline and CloudFormation
+Parameters:
+  CodeCommitRepoName:
+    Type: String
+  CodeCommitCloneUrl:
+    Type: String
+  ECRRepoName:
+    Type: String
+Resources:
+  # ECS Stack
+  ECSStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ./nested-stacks/ecs.template.yaml
+      Parameters:
+        ECRRepositoryName: !Ref ECRRepoName
+
+  # Pipeline Stack
+  CodePipelineStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - ECSStack
+    Properties:
+      TemplateURL: ./nested-stacks/pipeline.template.yaml
+      Parameters:
+        CodeCommitRepoName: !Ref CodeCommitRepoName
+        CodeCommitCloneUrl: !Ref CodeCommitCloneUrl
+        ECSClusterName: !GetAtt ECSStack.Outputs.ECSCluster
+        ECSServiceName: !GetAtt ECSStack.Outputs.ECSService

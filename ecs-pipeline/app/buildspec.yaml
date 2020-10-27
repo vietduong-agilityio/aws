@@ -1,0 +1,18 @@
+---
+  phases:
+    pre_build:
+      commands:
+        - "echo Logging in to ECR..."
+        - $(aws ecr get-login --no-include-email)
+    build:
+      commands:
+        - "echo Build started on `date`"
+        - "echo Building the Docker image..."
+        - "docker build -t 442977626115.dkr.ecr.us-east-2.amazonaws.com/practice-repo ."
+        - "docker tag 442977626115.dkr.ecr.us-east-2.amazonaws.com/practice-repo 442977626115.dkr.ecr.us-east-2.amazonaws.com/practice-repo:latest"
+    post_build:
+      commands:
+        - "echo Build completed on `date`"
+        - "echo Pushing the Docker image..."
+        - "docker push 442977626115.dkr.ecr.us-east-2.amazonaws.com/practice-repo:latest"
+  version: 0.1
