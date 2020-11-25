@@ -1,0 +1,34 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:alpine
+    ports:
+      - 5432:5432
+    env_file:
+      - ./product-api/.env
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: pgpassword
+    volumes:
+      - data-volume:/var/lib/db/postgres
+  app-api:
+    build: ./product-api
+    container_name: app-api
+    ports:
+      - 3000:3000
+    links:
+      - postgres
+    volumes:
+      - ./product-api:/app
+  client-app:
+    build: ./apollo-sample
+    container_name: client-app
+    command: node_modules/@angular/cli/bin/ng serve --host 0.0.0.0 --disable-host-check
+    depends_on:
+      - app-api
+    ports:
+      - 4200:4200
+    volumes:
+      - data-volume:/var/lib/client-app
+volumes:
+  data-volume:

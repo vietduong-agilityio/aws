@@ -1,0 +1,48 @@
+<div class="form-content">
+  <form (ngSubmit)="onSubmit()" *ngIf="signInForm" [formGroup]="signInForm" class="form-horizontal">
+
+    <!-- Information of item selected (empty if add new item) -->
+    <div class="col-sm-6">
+      <div class="form-group">
+        <label class="control-label col-sm-4 label-item">Email: *</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" formControlName="email" required>
+        </div>
+
+        <!-- If name input not valid, display message error -->
+        <div class="col-sm-8">
+          <div *ngIf="signInForm.controls.email.invalid && 
+              (signInForm.controls.email.dirty || signInForm.controls.email.touched)" class="alert alert-danger">
+            <div *ngIf="signInForm.controls.email.errors.required">
+              Email is required.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Name of country -->
+      <div class="form-group">
+        <label class="control-label col-sm-4 label-item">Password: *</label>
+        <div class="col-sm-8">
+          <input type="password" class="form-control" formControlName="pass" required>
+        </div>
+
+        <!-- If name input not valid, display message error -->
+        <div class="col-sm-8">
+          <div *ngIf="signInForm.controls.pass.invalid && 
+              (signInForm.controls.pass.dirty || signInForm.controls.pass.touched)" class="alert alert-danger">
+            <div *ngIf="signInForm.controls.pass.errors.required">
+              Pass is required.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- List actions -->
+    <div class="col-sm-2 col-sm-offset-4 form-action">
+      <button type="submit" class="btn btn-primary col-sm-12 action" [disabled]="!signInForm.valid">Submit
+      </button>
+    </div>
+  </form>
+</div>

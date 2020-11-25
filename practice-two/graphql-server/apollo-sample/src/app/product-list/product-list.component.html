@@ -1,0 +1,62 @@
+<button type="button" class="btn btn-primary add-btn" (click)="onClick()">Add Product</button>
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">TITLE</th>
+    <th scope="col">PRICE</th>
+    <th scope="col">ACTIONS</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr *ngIf="!products?.length">NO ITEM</tr>
+    <tr *ngFor="let product of products">
+      <td>
+        {{ product?.title || 'N/A' }}
+      </td>
+      <td>{{ product?.price || 'N/A' }}</td>
+      <td>
+        <a (click)="goToEdit(product.id)">
+          <span class="glyphicon glyphicon-edit"></span>
+        </a>
+        <a (click)="goToDelete(product)" data-toggle="modal" data-target="#exampleModal">
+          <span class="glyphicon glyphicon-trash"></span>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Product</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure to delete product "{{ productDelete?.title }}"?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="removeProduct(productDelete.id)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chat-box">
+  <p class="chat-label">Chat Box</p>
+  <div class="chat-content">
+    <div class="chat-msg" *ngFor="let message of messages">
+      <p class="chat-user"> {{ message?.user?.name }}: </p>
+      <p> {{ message?.text }} </p>
+    </div>
+  </div>
+  <div class="chat-submit">
+    <input #chatText type="text" class="form-control" placeholder="Text" aria-label="Username" aria-describedby="basic-addon1">
+    <button type="button" class="btn btn-success" (click)="onChat(chatText.value)">Chat</button>
+  </div>
+</div>

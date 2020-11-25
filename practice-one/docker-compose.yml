@@ -1,0 +1,36 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:alpine
+    ports:
+      - 5432:5432
+    env_file:
+      - ./product-api/.env
+    environment:
+      POSTGRES_USER: $POSTGRES_USERNAME
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    volumes:
+      - data-volume:/var/lib/db/sqlite
+  app-api:
+    build: ./product-api
+    container_name: app-api
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 3000:3000
+    links:
+      - postgres
+    volumes:
+      - data-volume:/var/lib/db
+  app-client:
+    build: ./product-app
+    container_name: app-client
+    command: npm start --host 0.0.0.0 --disable-host-check
+    depends_on:
+      - app-api
+    ports:
+      - 3001:3001
+    volumes:
+      - data-volume:/var/lib/backup/data
+volumes:
+  data-volume:

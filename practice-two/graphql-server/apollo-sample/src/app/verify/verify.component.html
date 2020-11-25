@@ -1,0 +1,48 @@
+<div class="form-content">
+  <form (ngSubmit)="onSubmit()" *ngIf="verifyForm" [formGroup]="verifyForm" class="form-horizontal">
+
+    <!-- Information of item selected (empty if add new item) -->
+    <div class="col-sm-6">
+      <div class="form-group">
+        <label class="control-label col-sm-4 label-item">Email: *</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" formControlName="email" readonly required>
+        </div>
+
+        <!-- If name input not valid, display message error -->
+        <div class="col-sm-8">
+          <div *ngIf="verifyForm.controls.email.invalid && 
+              (verifyForm.controls.email.dirty || verifyForm.controls.email.touched)" class="alert alert-danger">
+            <div *ngIf="verifyForm.controls.email.errors.required">
+              Email is required.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Name of country -->
+      <div class="form-group">
+        <label class="control-label col-sm-4 label-item">Code: *</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" formControlName="code" required>
+        </div>
+
+        <!-- If name input not valid, display message error -->
+        <div class="col-sm-8">
+          <div *ngIf="verifyForm.controls.code.invalid && 
+              (verifyForm.controls.code.dirty || verifyForm.controls.code.touched)" class="alert alert-danger">
+            <div *ngIf="verifyForm.controls.code.errors.required">
+              Code is required.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- List actions -->
+    <div class="col-sm-2 col-sm-offset-4 form-action">
+      <button type="submit" class="btn btn-primary col-sm-12 action" [disabled]="!verifyForm.valid">Submit
+      </button>
+    </div>
+  </form>
+</div>

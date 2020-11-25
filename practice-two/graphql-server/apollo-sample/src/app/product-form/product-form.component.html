@@ -1,0 +1,48 @@
+<div class="form-content">
+  <form (ngSubmit)="onSubmit()" *ngIf="productForm" [formGroup]="productForm" class="form-horizontal">
+
+    <!-- Information of item selected (empty if add new item) -->
+    <div class="col-sm-6">
+      <div class="form-group">
+        <label class="control-label col-sm-4 label-item">Title: *</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" formControlName="title" required>
+        </div>
+
+        <!-- If name input not valid, display message error -->
+        <div class="col-sm-8">
+          <div *ngIf="productForm.controls.title.invalid && 
+              (productForm.controls.title.dirty || productForm.controls.title.touched)" class="alert alert-danger">
+            <div *ngIf="productForm.controls.title.errors.required">
+              Title is required.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Name of country -->
+      <div class="form-group">
+        <label class="control-label col-sm-4 label-item">Price: *</label>
+        <div class="col-sm-8">
+          <input type="number" class="form-control" formControlName="price" required>
+        </div>
+
+        <!-- If name input not valid, display message error -->
+        <div class="col-sm-8">
+          <div *ngIf="productForm.controls.price.invalid && 
+              (productForm.controls.price.dirty || productForm.controls.price.touched)" class="alert alert-danger">
+            <div *ngIf="productForm.controls.price.errors.required">
+              Price is required.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- List actions -->
+    <div class="col-sm-2 col-sm-offset-4 form-action">
+      <button type="submit" class="btn btn-primary col-sm-12 action" [disabled]="!productForm.valid">Submit
+      </button>
+    </div>
+  </form>
+</div>
