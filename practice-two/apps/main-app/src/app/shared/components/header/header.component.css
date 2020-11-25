@@ -1,0 +1,30 @@
+.utility {
+  font: italic 14px/14px "Old Standard TT", serif;
+  color: #404040;
+  text-transform: lowercase;
+  text-align: right;
+  margin: 19px 0 0;
+
+  position: absolute;
+
+  right: 0;
+}
+
+.link-utility {
+  text-decoration: none;
+
+  color: #404040;
+
+  transition: color 0.3s;
+}
+
+.link-utility:hover {
+  color: #f73691;
+}
+
+.logo-img {
+  margin: 0 auto 0;
+  width: 500px;
+  height: auto;
+  display: block;
+}

@@ -1,0 +1,126 @@
+<div class="bill-section">
+  <h3 class="checkout-title">Billing Details</h3>
+  <!-- Form to user fill the information for checkout -->
+  <form [formGroup]="checkoutForm">
+
+    <!-- Name fields -->
+    <div formGroupName="name">
+      <div class="form-group col-xs-6">
+        <input type="text" class="form-control" formControlName="first" placeholder="First name (*)">
+
+        <!-- Validate first name field -->
+        <div *ngIf="firstName.invalid && 
+            (firstName.dirty || firstName.touched)" class="alert alert-danger error">
+          <div *ngIf="firstName.errors.minlength">
+            First name must be at least 2 characters long!
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-xs-6">
+        <input type="text" class="form-control" formControlName="last" placeholder="Last name (*)">
+
+        <!-- Validate last name field -->
+        <div *ngIf="lastName.invalid && 
+            (lastName.dirty || lastName.touched)" class="alert alert-danger error">
+          <div *ngIf="lastName.errors.minlength">
+            Last name must be at least 2 characters long!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Company field -->
+    <div class="form-group col-xs-12">
+      <input type="text" class="form-control" formControlName="company" placeholder="Company name (*)">
+
+      <!-- Validate company field -->
+      <div *ngIf="company.invalid && 
+          (company.dirty || company.touched)" class="alert alert-danger error">
+        <div *ngIf="company.errors.required">
+          Company is required!
+        </div>
+      </div>
+    </div>
+
+    <!-- Address fields -->
+    <div formGroupName="address">
+
+      <!-- Country field -->
+      <div class="form-group col-xs-4">
+        <countries [formControl]="checkoutForm.get('address').get('country')"></countries>
+
+        <!-- Validate country field -->
+        <div *ngIf="country.invalid && 
+            (country.dirty || country.touched)" class="alert alert-danger error">
+          <div *ngIf="country.errors.required">
+            Country is required!
+          </div>
+        </div>
+      </div>
+      <!-- Street field -->
+      <div class="form-group col-xs-4">
+        <input type="text" class="form-control" formControlName="street" placeholder="Street name">
+      </div>
+
+      <!-- City field -->
+      <div class="form-group col-xs-4">
+        <input type="text" class="form-control" formControlName="city" placeholder="City name (*)">
+
+        <!-- Validate city field -->
+        <div *ngIf="city.invalid && 
+            (city.dirty || city.touched)" class="alert alert-danger error">
+          <div *ngIf="city.errors.required">
+            City is required!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone field -->
+    <div class="form-group col-xs-12">
+      <input type="text" class="form-control" formControlName="phone" placeholder="Phone number (*)">
+
+      <!-- Validate phone field -->
+      <div *ngIf="phone.invalid && 
+          (phone.dirty || phone.touched)" class="alert alert-danger error">
+        <div *ngIf="phone.errors.required">
+          Phone is required!
+        </div>
+        <div *ngIf="phone.errors.pattern">
+          Phone must be number!
+        </div>
+      </div>
+    </div>
+
+    <!-- Email field -->
+    <div class="form-group col-xs-12">
+      <input type="text" class="form-control" formControlName="email" placeholder="Email address (*)">
+
+      <!-- Validate email field -->
+      <div *ngIf="email.invalid && 
+          (email.dirty || email.touched)" class="alert alert-danger error">
+        <div *ngIf="email.errors.email">
+          Email is incorrect format!
+        </div>
+      </div>
+    </div>
+
+    <!-- Range date to delivery -->
+    <div class="form-group col-xs-12">
+      <date-picker (setFromDate)="setFromDate($event)" (setToDate)="setToDate($event)"></date-picker>
+    </div>
+  </form>
+</div>
+
+<!-- Order detail -->
+<div class="order-section">
+  <h3 class="checkout-title">Order detail</h3>
+  <div class="col-xs-12">
+    <order-table></order-table>
+  </div>
+</div>
+
+<div class="checkout-btn">
+  <button class="btn btn-success" [disabled]="!checkoutForm.valid" (click)="addBill()">CHECKOUT</button>
+</div>

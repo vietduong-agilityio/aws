@@ -1,0 +1,109 @@
+{
+  "$schema": "./node_modules/@nrwl/schematics/src/schema.json",
+  "project": {
+    "name": "practice2",
+    "npmScope": "practice2",
+    "latestMigration": "20180130-angular-devkit-schematics"
+  },
+  "e2e": {
+    "protractor": {
+      "config": "./protractor.conf.js"
+    }
+  },
+  "lint": [
+    {
+      "project": "./tsconfig.spec.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "apps/main-app/src/tsconfig.app.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "apps/main-app/e2e/tsconfig.e2e.json",
+      "exclude": "**/node_modules/**"
+    }
+  ],
+  "test": {
+    "karma": {
+      "config": "./karma.conf.js"
+    }
+  },
+  "defaults": {
+    "schematics": {
+      "collection": "@nrwl/schematics",
+      "newProject": [
+        "app",
+        "lib"
+      ]
+    },
+    "styleExt": "css",
+    "component": {}
+  },
+  "warnings": {
+    "typescriptMismatch": false
+  },
+  "apps": [
+    {
+      "name": "main-app",
+      "root": "apps/main-app/src",
+      "outDir": "dist/apps/main-app",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "test": "../../../test.js",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "../../../tsconfig.spec.json",
+      "prefix": "",
+      "styles": [
+        "styles.css"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name": "playground",
+      "root": "apps/main-app/src",
+      "outDir": "dist-playground",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "index": "index.html",
+      "main": "main.playground.ts",
+      "polyfills": "polyfills.ts",
+      "tsconfig": "tsconfig.app.json",
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name": "countries",
+      "root": "libs/countries/src",
+      "test": "../../../test.js",
+      "appRoot": ""
+    },
+    {
+      "name": "date-picker",
+      "root": "libs/date-picker/src",
+      "test": "../../../test.js",
+      "appRoot": ""
+    },
+    {
+      "name": "dynamic-form",
+      "root": "libs/dynamic-form/src",
+      "test": "../../../test.js",
+      "appRoot": ""
+    }
+  ]
+}

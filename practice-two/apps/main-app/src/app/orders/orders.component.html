@@ -1,0 +1,24 @@
+<form (ngSubmit)="onSubmit()" class="cart-form">
+  <div class="cart-update">
+    <h2>your cart</h2>
+    <div>
+      <button type="button">UPDATE</button>
+    </div>
+  </div>
+
+  <!-- Table to display data loaded from local storage -->
+  <order-table></order-table>
+
+  <!-- Click to navigate to checkout page -->
+  <div class="cart-total">
+    <h3>
+      Cart Total: 
+      <span>${{totalPrice}}</span>
+    </h3>
+    <div>
+      <button class="checkout-button" [disabled]="!totalPrice">
+        CHECKOUT
+      </button>
+    </div>
+  </div>
+</form>

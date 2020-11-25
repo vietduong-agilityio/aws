@@ -1,0 +1,19 @@
+input {
+  height: 45px;
+}
+
+.checkout-title {
+  font-size: 18px;
+}
+
+.checkout-btn {
+  text-align: center;
+}
+
+.checkout-btn button {
+  margin: 30px;
+}
+
+.order-section {
+  clear: both;
+}

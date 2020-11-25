@@ -1,0 +1,95 @@
+.cart-form {
+  font: 13px/32px "Montserrat", sans-serif;
+  color: #404040;
+}
+
+.cart-update {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart-update h2 {
+  font: 27px/32px "Old Standard TT", serif;
+  text-transform: capitalize;
+}
+
+.cart-update button {
+  display: inline-block;
+
+  width: auto;
+  height: 30px;
+
+  background: #fff;
+  border: 2px solid #959595;
+  font: 700 10px/27px "Montserrat", sans-serif;
+  color: #959595;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0 26px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  min-width: 300px;
+}
+
+.mat-table {
+  font: 13px/32px "Montserrat", sans-serif;
+  color: #404040;
+  overflow: auto;
+  max-height: 500px;
+}
+
+.mat-header-cell {
+  color: #404040;
+  font-weight: 700;
+}
+
+.mat-cell {
+  font-size: 13px;
+}
+
+.mat-cell img {
+  width: 50px;
+}
+
+.mat-cell a {
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+.cart-total {
+  padding: 20px;
+
+  text-align: right;
+  text-transform: uppercase;
+
+  font: 12px/32px "Montserrat", sans-serif;
+}
+
+.cart-total h3 {
+  font-size: 12px;
+
+  letter-spacing: 1px;
+}
+
+.checkout-button {
+  margin: 0.75em 0;
+
+  color: #e2bb1b;
+  border-color: #e2bb1b;
+  background: #fff;
+
+  padding: 0 35px;
+  font-size: 12px;
+  font-weight: bold;
+  height: 40px;
+
+  border: 2px solid #e2bb1b;
+}

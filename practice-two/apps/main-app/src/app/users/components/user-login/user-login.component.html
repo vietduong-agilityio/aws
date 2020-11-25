@@ -1,0 +1,21 @@
+<div class="user-login">
+  <img src="https://cdn.shopify.com/s/files/1/0177/2358/t/14/assets/account.jpg?17367758922558228004" 
+       alt="Lindsay Letters">
+  <h2>Customer Login</h2>
+
+  <!-- Form login -->
+  <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+    <div *ngFor="let question of questions" class="center">
+      <dynamic-input [question]="question" [form]="loginForm"></dynamic-input>
+    </div>
+
+
+    <div class="center msg">
+      {{loginMessage}}
+    </div>
+
+    <div class="center">
+      <button type="submit" [disabled]="!loginForm.valid">Sign in</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,61 @@
+.user-login {
+  width: 774px;
+  background: #fcfbf9;
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
+  padding: 7px 7px 35px;
+  margin: 0 auto 24px;
+}
+
+.user-login img {
+  display: block;
+  padding: 0;
+  margin: 0 auto;
+}
+
+.user-login h2 {
+  text-align: center;
+  margin: 30px 0;
+  font-weight: normal;
+  font: 400 16px/32px "Montserrat", sans-serif;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.center {
+  text-align: center;
+}
+
+.center input {
+  display: inline-block;
+  width: 300px;
+  background: url("https://cdn.shopify.com/s/files/1/0177/2358/t/14/assets/bg-input-email.png?10538846343483707636")
+    no-repeat bottom center;
+  border: 0;
+  font: italic 17px/17px "Old Standard TT", serif;
+  color: #404040;
+  text-align: center;
+  padding: 0 0 10px;
+  margin: 30px 0 0;
+}
+.center button {
+  display: inline-block;
+  width: auto;
+  height: 30px;
+  background: #fff;
+  border: 2px solid #e2bb1b;
+  font: 700 10px/27px "Montserrat", sans-serif;
+  color: #e2bb1b;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0 26px;
+  margin-top: 30px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.msg {
+  margin-top: 15px;
+
+  font: 700 15px/27px "Montserrat", sans-serif;
+  color: #e9313c;
+}

@@ -1,0 +1,46 @@
+<div class="item-detail" *ngIf="book">
+  <div class="item-detail__header">
+    <h2>{{book.name}}</h2>
+  </div>
+
+  <!-- Information of item selected -->
+  <div class="item-detail__info">
+    <!-- Item image -->
+    <div class="col-xs-6">
+      <book-img [bookImg]="book.img"></book-img>
+    </div>
+
+    <div class="col-xs-5 col-xs-offset-1 item-frame">
+      <h3>Let's get started!</h3>
+      <div class="item-section">
+        <label>Select Finishing:</label>
+        <ul class="option-list">
+
+        </ul>
+      </div>
+
+      <!-- Information to add to cart -->
+      <div class="form-detail">
+        <div class="price">
+          <label>Price:</label>
+          <span>${{book.price}}</span>
+        </div>
+        <div class="quantity">
+          <input type="number" name="quantity" value="1" min="1" [(ngModel)]="quantity">
+          <label>Qty:</label>
+        </div>
+      </div>
+
+      <!-- Message to inform add success to cart -->
+      <div class="message">{{ msg }}</div>
+
+      <!-- Add to cart button -->
+      <button class="add-item" type="button" (click)="addToCart()">add to cart</button>
+    </div>
+
+    <!-- Item description -->
+    <div class="col-xs-12 item-description">
+      {{book.des}}
+    </div>
+  </div>
+</div>

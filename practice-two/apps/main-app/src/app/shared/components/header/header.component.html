@@ -1,0 +1,18 @@
+<!-- User information -->
+<div class="utility">
+  <a routerLink="/login" class="link-utility">{{userName}}</a> &nbsp; | &nbsp;
+  <a href="javascript:void(0)" class="link-utility">wishlist</a> &nbsp; | &nbsp;
+  <a routerLink="/cart" class="link-utility">
+    <i class="fa fa-shopping-cart"></i>
+    <span class="cart-count">{{totalItem}} items</span>:
+    <span class="cart-price">${{totalPrice}}</span>
+  </a>
+</div>
+
+<!-- Logo of page -->
+<h1>
+  <a class="logo" routerLink="/book-list">
+    <img alt="Lindsay Letters | home" src="../../../../assets/logo.png"
+      class="logo-img">
+  </a>
+</h1>

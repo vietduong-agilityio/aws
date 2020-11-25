@@ -1,0 +1,35 @@
+<!-- Introduction about list book -->
+<div class="list-item">
+  <h1>The Creatives Calendar™</h1>
+  <p>introducing our premium fine-art wall calendar&nbsp;–&nbsp;designed with creative spaces in mind!
+    <br>I wanted to create a calendar I was proud to display in my office&nbsp;– functional, yet chic.
+    <br>this one is covered in plexiglass,&nbsp;for use and enjoyment year over year.
+    <br>simple yet beautiful,&nbsp;choose the design, size and framing that best suits you and enjoy!
+  </p>
+</div>
+
+<!-- List book loaded from store -->
+<mat-grid-list gutterSize="20" cols="4" rowHeight="1:1.2" *ngIf="books$">
+  <mat-grid-tile *ngFor="let book of books$ | paginate: { itemsPerPage: 12, currentPage: p }">
+    <div class="img-square">
+      <a routerLink="/book-detail/{{book.id}}">
+        <img [attr.src]="book.img">
+      </a>
+    </div>
+
+    <div class="item-info">
+      <p class="item-title">{{book.name}}</p>
+      <p class="item-price">${{book.price}}+</p>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
+
+<!-- Pagination -->
+<!-- <ngb-pagination [collectionSize]="books$.length" 
+                [(page)]="page" 
+                [pageSize]="4" 
+                (pageChange)="$event" aria-label="Default pagination">
+</ngb-pagination> -->
+<div class="paginator">
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>

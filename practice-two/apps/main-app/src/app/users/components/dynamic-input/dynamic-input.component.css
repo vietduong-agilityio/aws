@@ -1,0 +1,17 @@
+input {
+  display: inline-block;
+  width: 300px;
+  background: url("https://cdn.shopify.com/s/files/1/0177/2358/t/14/assets/bg-input-email.png?10538846343483707636")
+    no-repeat bottom center;
+  border: 0;
+  font: italic 17px/17px "Old Standard TT", serif;
+  color: #404040;
+  text-align: center;
+  padding: 0 0 10px;
+  margin: 30px 0 0;
+}
+
+.error {
+  width: 300px;
+  margin: 10px auto;
+}

@@ -1,0 +1,22 @@
+<div [formGroup]="form">
+  <div [ngSwitch]="question.controlType">
+    <input *ngSwitchCase="'textbox'" [formControlName]="question.key" 
+                                     [id]="question.key" 
+                                     [type]="question.type" 
+                                     [placeholder]="question.placeholder">
+
+    <!-- Validate password require -->
+    <div *ngIf="nameControl.invalid && (nameControl.dirty || nameControl.touched)" 
+          class="alert alert-danger error">
+      <div *ngIf="nameControl.errors.required">
+          {{question.key}} is required!.
+      </div>
+      <div *ngIf="nameControl.errors.minlength">
+        {{question.key}} is least 2 charactors!.
+      </div>
+      <div *ngIf="nameControl.errors.email">
+        {{question.key}} is incorrect format!.
+      </div>
+    </div>
+  </div>
+</div>
